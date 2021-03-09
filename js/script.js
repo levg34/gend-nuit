@@ -1,44 +1,44 @@
 
-import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js';
+import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js'
 
-import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js'
 
-import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.module.js';
+import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.module.js'
 
-import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/ColladaLoader.js';
+import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/ColladaLoader.js'
 
-let container, stats, clock;
-let camera, scene, renderer, gendCar;
+let container, stats, clock
+let camera, scene, renderer, gendCar
 
-init();
-animate();
+init()
+animate()
 
 function init() {
 
-    container = document.getElementById( 'container' );
+    container = document.getElementById( 'container' )
 
-    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
-    camera.position.set( 8, 10, 8 );
-    camera.lookAt( 0, 0, 0 );
+    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 )
+    camera.position.set( 8, 10, 8 )
+    camera.lookAt( 0, 0, 0 )
 
-    scene = new THREE.Scene();
+    scene = new THREE.Scene()
 
-    clock = new THREE.Clock();
+    clock = new THREE.Clock()
 
     // loading manager
 
     const loadingManager = new THREE.LoadingManager( function () {
 
-        scene.add( gendCar );
+        scene.add( gendCar )
 
-    } );
+    } )
 
     // collada
 
-    const loader = new ColladaLoader( loadingManager );
+    const loader = new ColladaLoader( loadingManager )
     loader.load( './model/truc/model.dae', function ( collada ) {
 
-        gendCar = collada.scene;
+        gendCar = collada.scene
 
         gendCar.name = 'gend-car'
 
@@ -48,10 +48,7 @@ function init() {
 
         console.log(gendCar)
         noWireframe(gendCar)
-        
-        window.gendarme = gendCar;
-
-    } );
+    } )
 
     function repare(material) {
         if (o.material.color && o.material.color.r == 1) {
@@ -91,40 +88,41 @@ function init() {
     const plane = new THREE.Mesh(geometry, material)
     // plane.rotateY(Math.Pi/2)
     plane.rotation.x = Math.PI/2
+    plane.translateZ(+0.02)
     plane.receiveShadow = true
     scene.add(plane)
 
     //
 
-    const ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
-    scene.add( ambientLight );
+    const ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 )
+    scene.add( ambientLight )
 
-    const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
-    directionalLight.position.set( 1, 1, 0 ).normalize();
-    scene.add( directionalLight );
-
-    //
-
-    renderer = new THREE.WebGLRenderer();
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    container.appendChild( renderer.domElement );
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 )
+    directionalLight.position.set( 1, 1, 0 ).normalize()
+    scene.add( directionalLight )
 
     //
 
-    stats = new Stats();
-    container.appendChild( stats.dom );
+    renderer = new THREE.WebGLRenderer()
+    renderer.setPixelRatio( window.devicePixelRatio )
+    renderer.setSize( window.innerWidth, window.innerHeight )
+    container.appendChild( renderer.domElement )
 
-    const controls = new OrbitControls( camera, renderer.domElement );
+    //
+
+    stats = new Stats()
+    container.appendChild( stats.dom )
+
+    const controls = new OrbitControls( camera, renderer.domElement )
     controls.update()
 
     // grid
-    const gridHelper = new THREE.GridHelper( 28, 28, 0x303030, 0x303030 );
-    // scene.add( gridHelper );
+    const gridHelper = new THREE.GridHelper( 28, 28, 0x303030, 0x303030 )
+    scene.add( gridHelper )
 
     //
 
-    window.addEventListener( 'resize', onWindowResize );
+    window.addEventListener( 'resize', onWindowResize )
 
 }
 
@@ -144,31 +142,31 @@ function createCube(x,y,z,color) {
 
 function onWindowResize() {
 
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight )
 
 }
 
 function animate() {
 
-    requestAnimationFrame( animate );
-    render();
-    stats.update();
+    requestAnimationFrame( animate )
+    render()
+    stats.update()
 
 }
 
 function render() {
 
-    const delta = clock.getDelta();
+    const delta = clock.getDelta()
 
     if ( gendCar !== undefined ) {
 
-        // gendCar.rotation.z += delta * 0.5;
+        // gendCar.rotation.z += delta * 0.5
 
     }
 
-    renderer.render( scene, camera );
+    renderer.render( scene, camera )
 
 }
