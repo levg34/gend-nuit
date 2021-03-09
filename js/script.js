@@ -14,12 +14,11 @@ init()
 animate()
 
 function init() {
+    container = document.getElementById('container')
 
-    container = document.getElementById( 'container' )
-
-    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 )
-    camera.position.set( 8, 10, 8 )
-    camera.lookAt( 0, 0, 0 )
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000)
+    camera.position.set(8, 10, 8)
+    camera.lookAt(0, 0, 0)
 
     scene = new THREE.Scene()
 
@@ -27,17 +26,14 @@ function init() {
 
     // loading manager
 
-    const loadingManager = new THREE.LoadingManager( function () {
-
-        scene.add( gendCar )
-
-    } )
+    const loadingManager = new THREE.LoadingManager(function () {
+        scene.add(gendCar)
+    })
 
     // collada
 
-    const loader = new ColladaLoader( loadingManager )
-    loader.load( './model/truc/model.dae', function ( collada ) {
-
+    const loader = new ColladaLoader(loadingManager)
+    loader.load('./model/truc/model.dae', function (collada) {
         gendCar = collada.scene
 
         gendCar.name = 'gend-car'
@@ -46,16 +42,8 @@ function init() {
         gendCar.translateX(-1.1)
         gendCar.translateZ(+1.3)
 
-        console.log(gendCar)
         noWireframe(gendCar)
     } )
-
-    function repare(material) {
-        if (o.material.color && o.material.color.r == 1) {
-            o.material = new THREE.MeshLambertMaterial({transparent:true,opacity:0})
-            // console.log(o.material)
-        }
-    }
 
     function noWireframe(object) {
         const lines = new Map();
@@ -86,7 +74,6 @@ function init() {
     const material = new THREE.MeshPhongMaterial({color: 'gray',side: THREE.DoubleSide})
 
     const plane = new THREE.Mesh(geometry, material)
-    // plane.rotateY(Math.Pi/2)
     plane.rotation.x = Math.PI/2
     plane.translateZ(+0.02)
     plane.receiveShadow = true
@@ -94,36 +81,37 @@ function init() {
 
     //
 
-    const ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 )
-    scene.add( ambientLight )
+    const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4)
+    scene.add(ambientLight)
 
-    const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 )
-    directionalLight.position.set( 1, 1, 0 ).normalize()
-    scene.add( directionalLight )
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1)//0.8)
+    directionalLight.position.set(1, 1, 0).normalize()
+    directionalLight.castShadow = true
+    scene.add(directionalLight)
 
     //
 
     renderer = new THREE.WebGLRenderer()
-    renderer.setPixelRatio( window.devicePixelRatio )
-    renderer.setSize( window.innerWidth, window.innerHeight )
-    container.appendChild( renderer.domElement )
+    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.shadowMap.enabled = true
+    container.appendChild(renderer.domElement)
 
     //
 
     stats = new Stats()
-    container.appendChild( stats.dom )
+    container.appendChild(stats.dom)
 
-    const controls = new OrbitControls( camera, renderer.domElement )
+    const controls = new OrbitControls(camera, renderer.domElement)
     controls.update()
 
     // grid
-    const gridHelper = new THREE.GridHelper( 28, 28, 0x303030, 0x303030 )
-    scene.add( gridHelper )
+    const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
+    scene.add(gridHelper)
 
     //
 
-    window.addEventListener( 'resize', onWindowResize )
-
+    window.addEventListener('resize', onWindowResize)
 }
 
 function createCube(x,y,z,color) {
@@ -137,36 +125,30 @@ function createCube(x,y,z,color) {
     cube.translateX(y)
     cube.translateY(0.5)
 
+    cube.castShadow = true
+
     return cube
 }
 
 function onWindowResize() {
-
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()
 
-    renderer.setSize( window.innerWidth, window.innerHeight )
-
+    renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
 function animate() {
-
-    requestAnimationFrame( animate )
+    requestAnimationFrame(animate)
     render()
     stats.update()
-
 }
 
 function render() {
-
     const delta = clock.getDelta()
 
-    if ( gendCar !== undefined ) {
-
+    if (gendCar !== undefined) {
         // gendCar.rotation.z += delta * 0.5
-
     }
 
-    renderer.render( scene, camera )
-
+    renderer.render(scene, camera)
 }
