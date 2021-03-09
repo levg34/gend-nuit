@@ -48,6 +48,8 @@ function init() {
 
         console.log(gendCar)
         noWireframe(gendCar)
+        
+        window.gendarme = gendCar;
 
     } );
 
@@ -59,33 +61,19 @@ function init() {
     }
 
     function noWireframe(object) {
+        const lines = new Map();
         object.traverse(o => {
-            if (o.isMesh) {
-
-                o.material = new THREE.MeshLambertMaterial({transparent:true,opacity:0})
-
-                // console.log(o.material)
-
-                // o.material.transparent = true
-
-                // if (o.material.color && o.material.color.r == 1) {
-                //     o.material = new THREE.MeshLambertMaterial({transparent:true,opacity:0})
-                //     // console.log(o.material)
-                // }
-/*
-                if (!(o.material instanceof THREE.MeshLambertMaterial)) {
-                    if (o.material instanceof Array) {
-                        o.material.forEach(m => repare(m))
-                    } else {
-                        console.log(o.material)
-                        repare(o.material)
-                    }
-
-                } else {
-                    // repare(o.material)
-                }*/
+            if (o instanceof THREE.LineSegments) {
+                const pt = o.parent;
+                let l = lines.get(pt);
+                if (!l) {
+                    l = [];
+                    lines.set(pt, l);
+                }
+                l.push(o);
             }
         })
+        lines.forEach((ls, k) => ls.forEach(l => k.remove(l)));
     }
 
     // cube
