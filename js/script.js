@@ -2,9 +2,12 @@ import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js'
 import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js'
 import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.module.js'
 import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/ColladaLoader.js'
+// import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
 
-let container, stats, clock
-let camera, scene, renderer, gendCar
+let container, stats
+let camera, scene, renderer, gendCar, light
+
+let switchBack
 
 init()
 animate()
@@ -17,8 +20,6 @@ function init() {
     camera.lookAt(0, 0, 0)
 
     scene = new THREE.Scene()
-
-    clock = new THREE.Clock()
 
     // loading manager
 
@@ -35,8 +36,21 @@ function init() {
     //     z:+1.3
     // })
 
-    // loadCollada(loadingManager,'./model/meganeBizarre-gend/model.dae')
+    loadCollada(loadingManager,'./model/meganeBizarre-gend/model.dae',{
+        name:'gend-car',
+        y:-1,
+        x:-2.2,
+        z:0
+    })
     // loadCollada(loadingManager,'./model/megSecMont-gend/model.dae')
+
+    // fbx
+
+    // const loader = new FBXLoader()
+    // loader.load( 'model/fbx/Gendarmerie_Dacia_Duster.FBX', function (object) {
+    //     object.scale
+    //     scene.add(object)
+    // })
 
     // cube
 
@@ -44,6 +58,7 @@ function init() {
     scene.add(cube)
     scene.add(createCube(0,8,0,0xffffff))
     scene.add(createCube(0,0,8,0xff0000))
+    scene.add(createCube(0,-8,0,0xf4fa7b))
 
     // plan 
 
@@ -59,12 +74,25 @@ function init() {
     //
 
     const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4)
-    scene.add(ambientLight)
+    // scene.add(ambientLight)
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1)//0.8)
     directionalLight.position.set(1, 1, 0).normalize()
-    directionalLight.castShadow = true
-    scene.add(directionalLight)
+    // directionalLight.castShadow = true
+    // scene.add(directionalLight)
+
+    const sphere = new THREE.SphereGeometry( 0.5, 16, 8 )
+
+    light = new THREE.PointLight(0xfad6a5, 1, 100)
+    light.position.set(8, 8, 8)
+    light.add( new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({color: 0xfad6a5})))
+    light.castShadow = true
+    scene.add(light)
+
+    const light2 = new THREE.PointLight(0xfad6a5, 1, 100)
+    light2.position.set(-8, 8, 8)
+    light2.add( new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({color: 0xfad6a5})))
+    // scene.add(light2)
 
     //
 
@@ -113,6 +141,16 @@ function loadCollada(loadingManager,path,options) {
         }
 
         noWireframe(gendCar)
+
+        makeShadow(gendCar)
+    })
+}
+
+function makeShadow(object) {
+    object.traverse(o => {
+        if (o.isMesh) {
+            o.castShadow = true
+        }
     })
 }
 
@@ -162,10 +200,23 @@ function animate() {
 }
 
 function render() {
-    const delta = clock.getDelta()
-
     if (gendCar !== undefined) {
         // gendCar.rotation.z += delta * 0.5
+    }
+
+    if (light !== undefined) {
+        if (Math.abs(light.position.x - 8) < 0.05) {
+            switchBack = true
+        }
+        if (Math.abs(light.position.x + 8) < 0.05) {
+            switchBack = false
+        }
+        // if (light.position.x > -8) {
+        if (switchBack) {
+            light.position.x -= 0.1
+        } else {
+            light.position.x += 0.1
+        }
     }
 
     renderer.render(scene, camera)
