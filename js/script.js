@@ -67,7 +67,7 @@ function init() {
 
     const plane = new THREE.Mesh(geometry, material)
     plane.rotation.x = Math.PI/2
-    plane.translateZ(+0.02)
+    // plane.translateZ(+0.02)
     plane.receiveShadow = true
     scene.add(plane)
 
@@ -112,7 +112,7 @@ function init() {
 
     // grid
     const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
-    scene.add(gridHelper)
+    // scene.add(gridHelper)
 
     //
 
