@@ -1,10 +1,6 @@
-
 import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js'
-
 import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js'
-
 import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.module.js'
-
 import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/ColladaLoader.js'
 
 let container, stats, clock
@@ -32,34 +28,15 @@ function init() {
 
     // collada
 
-    const loader = new ColladaLoader(loadingManager)
-    loader.load('./model/truc/model.dae', function (collada) {
-        gendCar = collada.scene
+    // loadCollada(loadingManager,'./model/truc/model.dae',{
+    //     name:'gend-car',
+    //     y:-15.5,
+    //     x:-1.1,
+    //     z:+1.3
+    // })
 
-        gendCar.name = 'gend-car'
-
-        gendCar.translateY(-15.5)
-        gendCar.translateX(-1.1)
-        gendCar.translateZ(+1.3)
-
-        noWireframe(gendCar)
-    } )
-
-    function noWireframe(object) {
-        const lines = new Map();
-        object.traverse(o => {
-            if (o instanceof THREE.LineSegments) {
-                const pt = o.parent;
-                let l = lines.get(pt);
-                if (!l) {
-                    l = [];
-                    lines.set(pt, l);
-                }
-                l.push(o);
-            }
-        })
-        lines.forEach((ls, k) => ls.forEach(l => k.remove(l)));
-    }
+    // loadCollada(loadingManager,'./model/meganeBizarre-gend/model.dae')
+    // loadCollada(loadingManager,'./model/megSecMont-gend/model.dae')
 
     // cube
 
@@ -112,6 +89,47 @@ function init() {
     //
 
     window.addEventListener('resize', onWindowResize)
+}
+
+function loadCollada(loadingManager,path,options) {
+    const loader = new ColladaLoader(loadingManager)
+    loader.load(path, function (collada) {
+        gendCar = collada.scene
+
+        if (options) {
+            if (options.name) {
+                gendCar.name = options.name
+            }
+    
+            if (options.x) {
+                gendCar.translateX(options.x)
+            }
+            if (options.y) {
+                gendCar.translateY(options.y)
+            }
+            if (options.z) {
+                gendCar.translateZ(options.z)
+            }
+        }
+
+        noWireframe(gendCar)
+    })
+}
+
+function noWireframe(object) {
+    const lines = new Map()
+    object.traverse(o => {
+        if (o instanceof THREE.LineSegments) {
+            const pt = o.parent
+            let l = lines.get(pt)
+            if (!l) {
+                l = []
+                lines.set(pt, l)
+            }
+            l.push(o)
+        }
+    })
+    lines.forEach((ls, k) => ls.forEach(l => k.remove(l)))
 }
 
 function createCube(x,y,z,color) {
