@@ -2,12 +2,13 @@ import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js'
 import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js'
 import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.module.js'
 import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/ColladaLoader.js'
+import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.module'
 // import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
 
 let container, stats
-let camera, scene, renderer, gendCar, light
+let camera, scene, renderer, gendCar, light, headlight1, headlight2
 
-let switchBack
+let switchBack, frames = 0
 
 init()
 animate()
@@ -81,7 +82,7 @@ function init() {
     // directionalLight.castShadow = true
     // scene.add(directionalLight)
 
-    const sphere = new THREE.SphereGeometry( 0.5, 16, 8 )
+    const sphere = new THREE.SphereGeometry(0.5, 16, 8)
 
     light = new THREE.PointLight(0xfad6a5, 1, 100)
     light.position.set(8, 8, 8)
@@ -89,10 +90,19 @@ function init() {
     light.castShadow = true
     scene.add(light)
 
-    const light2 = new THREE.PointLight(0xfad6a5, 1, 100)
-    light2.position.set(-8, 8, 8)
-    light2.add( new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({color: 0xfad6a5})))
-    // scene.add(light2)
+    const sphere2 = new THREE.SphereGeometry(0.05, 16, 8)
+    const colorHeadlight = 0x44b8fc
+
+    headlight1 = new THREE.PointLight(colorHeadlight, 1, 100)
+    headlight1.position.set(0.25, 1.54, -0.4)
+    headlight1.add( new THREE.Mesh(sphere2, new THREE.MeshBasicMaterial({color: colorHeadlight})))
+    scene.add(headlight1)
+
+    headlight2 = new THREE.PointLight(colorHeadlight, 1, 100)
+    headlight2.copy(headlight1)
+    headlight2.position.z = -headlight1.position.z
+    headlight2.visible = false
+    scene.add(headlight2)
 
     //
 
@@ -114,6 +124,16 @@ function init() {
     const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
     // scene.add(gridHelper)
 
+    // GUI
+/*
+    const gui = new GUI()
+    const pointLightFolder = gui.addFolder('THREE.PointLight')
+    pointLightFolder.add(headlight1,'visible')
+    pointLightFolder.add(headlight1.position,'x')
+    pointLightFolder.add(headlight1.position,'y')
+    pointLightFolder.add(headlight1.position,'z')
+    pointLightFolder.add(headlight1,'power')
+*/
     //
 
     window.addEventListener('resize', onWindowResize)
@@ -216,6 +236,14 @@ function render() {
             light.position.x -= 0.1
         } else {
             light.position.x += 0.1
+        }
+    }
+
+    if (headlight1 !== undefined && headlight2 !== undefined) {
+        if (frames++>12) {
+            headlight1.visible = !headlight1.visible
+            headlight2.visible = !headlight2.visible
+            frames = 0
         }
     }
 
