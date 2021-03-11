@@ -125,15 +125,18 @@ function init() {
     // scene.add(gridHelper)
 
     // GUI
-/*
+
     const gui = new GUI()
-    const pointLightFolder = gui.addFolder('THREE.PointLight')
-    pointLightFolder.add(headlight1,'visible')
-    pointLightFolder.add(headlight1.position,'x')
-    pointLightFolder.add(headlight1.position,'y')
-    pointLightFolder.add(headlight1.position,'z')
+    const pointLightFolder = gui.addFolder('Gyrophares')
+    // pointLightFolder.add(headlight1,'visible')
+    // pointLightFolder.add(headlight1.position,'x')
+    // pointLightFolder.add(headlight1.position,'y')
+    // pointLightFolder.add(headlight1.position,'z')
     pointLightFolder.add(headlight1,'power')
-*/
+    pointLightFolder.add(headlight2,'power')
+    const lightFolder = gui.addFolder('Lampadaire')
+    lightFolder.add(light,'visible')
+
     //
 
     window.addEventListener('resize', onWindowResize)
