@@ -90,18 +90,20 @@ function init() {
     light.castShadow = true
     scene.add(light)
 
-    const sphere2 = new THREE.SphereGeometry(0.05, 16, 8)
+    const sphere2 = new THREE.SphereGeometry(0.02, 16, 8)
     const colorHeadlight = 0x44b8fc
 
     headlight1 = new THREE.PointLight(colorHeadlight, 1, 100)
     headlight1.position.set(0.25, 1.54, -0.4)
     headlight1.add( new THREE.Mesh(sphere2, new THREE.MeshBasicMaterial({color: colorHeadlight})))
+    headlight1.castShadow = true
     scene.add(headlight1)
 
     headlight2 = new THREE.PointLight(colorHeadlight, 1, 100)
     headlight2.copy(headlight1)
-    headlight2.position.z = -headlight1.position.z
+    headlight2.position.z = 0.36
     headlight2.visible = false
+    headlight2.castShadow = true
     scene.add(headlight2)
 
     //
@@ -127,13 +129,14 @@ function init() {
     // GUI
 
     const gui = new GUI()
-    const pointLightFolder = gui.addFolder('Gyrophares')
+    // const pointLightFolder = gui.addFolder('Gyrophares')
     // pointLightFolder.add(headlight1,'visible')
     // pointLightFolder.add(headlight1.position,'x')
     // pointLightFolder.add(headlight1.position,'y')
     // pointLightFolder.add(headlight1.position,'z')
-    pointLightFolder.add(headlight1,'power')
-    pointLightFolder.add(headlight2,'power')
+    // pointLightFolder.add(headlight1,'power')
+    // pointLightFolder.add(headlight2.position,'z',0,0.5,0.01)
+    // pointLightFolder.add(headlight2,'power')
     const lightFolder = gui.addFolder('Lampadaire')
     lightFolder.add(light,'visible')
 
