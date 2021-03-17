@@ -93,18 +93,32 @@ function init() {
     const sphere2 = new THREE.SphereGeometry(0.02, 16, 8)
     const colorHeadlight = 0x44b8fc
 
-    headlight1 = new THREE.PointLight(colorHeadlight, 1, 100)
+    headlight1 = new THREE.PointLight(colorHeadlight, 3, 12)
     headlight1.position.set(0.25, 1.54, -0.4)
     headlight1.add( new THREE.Mesh(sphere2, new THREE.MeshBasicMaterial({color: colorHeadlight})))
     headlight1.castShadow = true
     scene.add(headlight1)
 
-    headlight2 = new THREE.PointLight(colorHeadlight, 1, 100)
+    headlight2 = new THREE.PointLight(colorHeadlight)
     headlight2.copy(headlight1)
     headlight2.position.z = 0.36
     headlight2.visible = false
     headlight2.castShadow = true
     scene.add(headlight2)
+
+    const spotLight = new THREE.SpotLight(0xffffff)
+    spotLight.position.set(-4, 0, 0)
+    spotLight.angle = Math.PI/6
+    spotLight.castShadow = true
+    // spotLight.shadow.mapSize.width = 1024
+    // spotLight.shadow.mapSize.height = 1024
+    // spotLight.shadow.camera.near = 500
+    // spotLight.shadow.camera.far = 4000
+    // spotLight.shadow.camera.fov = 30
+    // scene.add(spotLight)
+    
+    const spotLightHelper = new THREE.SpotLightHelper(spotLight)
+    // scene.add(spotLightHelper)
 
     //
 
@@ -129,16 +143,19 @@ function init() {
     // GUI
 
     const gui = new GUI()
-    // const pointLightFolder = gui.addFolder('Gyrophares')
+    const pointLightFolder = gui.addFolder('Gyrophares')
     // pointLightFolder.add(headlight1,'visible')
     // pointLightFolder.add(headlight1.position,'x')
     // pointLightFolder.add(headlight1.position,'y')
     // pointLightFolder.add(headlight1.position,'z')
-    // pointLightFolder.add(headlight1,'power')
+    pointLightFolder.add(headlight1,'intensity',1,10,1)
     // pointLightFolder.add(headlight2.position,'z',0,0.5,0.01)
-    // pointLightFolder.add(headlight2,'power')
+    pointLightFolder.add(headlight2,'intensity',1,10,1)
+    pointLightFolder.add(headlight1,'distance',5,15,1)
     const lightFolder = gui.addFolder('Lampadaire')
     lightFolder.add(light,'visible')
+    const spotlightFolder = gui.addFolder('Spotlight')
+    // spotlightFolder.add(spotLight,'angle',0,Math.PI,Math.PI/6)
 
     //
 
