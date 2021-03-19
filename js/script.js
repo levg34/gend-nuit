@@ -6,7 +6,7 @@ import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.m
 // import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
 
 let container, stats
-let camera, scene, renderer, gendCar, light, headlight1, headlight2
+let camera, scene, renderer, gendCar, gendCar2, landscape, light, headlight1, headlight2
 
 let switchBack, frames = 0
 
@@ -22,12 +22,6 @@ function init() {
 
     scene = new THREE.Scene()
 
-    // loading manager
-
-    const loadingManager = new THREE.LoadingManager(function () {
-        scene.add(gendCar)
-    })
-
     // collada
 
     // loadCollada(loadingManager,'./model/truc/model.dae',{
@@ -37,13 +31,18 @@ function init() {
     //     z:+1.3
     // })
 
-    loadCollada(loadingManager,'./model/meganeBizarre-gend/model.dae',{
+    // loadCollada(scene,'./model/megSecMont-gend/model.dae',landscape,{})
+
+    loadCollada(scene,'./model/meganeBizarre-gend/model.dae',gendCar,{
         name:'gend-car',
         y:-1,
         x:-2.2,
         z:0
     })
-    // loadCollada(loadingManager,'./model/megSecMont-gend/model.dae')
+
+    loadCollada(scene,'./model/megSecMont-gend/model.dae',gendCar2,{
+        y:-4
+    })
 
     // fbx
 
@@ -145,30 +144,32 @@ function init() {
     window.addEventListener('resize', onWindowResize)
 }
 
-function loadCollada(loadingManager,path,options) {
-    const loader = new ColladaLoader(loadingManager)
+function loadCollada(scene,path,model,options) {
+    const loader = new ColladaLoader()
     loader.load(path, function (collada) {
-        gendCar = collada.scene
+        model = collada.scene
 
         if (options) {
             if (options.name) {
-                gendCar.name = options.name
+                model.name = options.name
             }
     
             if (options.x) {
-                gendCar.translateX(options.x)
+                model.translateX(options.x)
             }
             if (options.y) {
-                gendCar.translateY(options.y)
+                model.translateY(options.y)
             }
             if (options.z) {
-                gendCar.translateZ(options.z)
+                model.translateZ(options.z)
             }
         }
 
-        noWireframe(gendCar)
+        noWireframe(model)
 
-        makeShadow(gendCar)
+        makeShadow(model)
+
+        scene.add(model)
     })
 }
 
