@@ -6,9 +6,8 @@ import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.m
 // import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
 
 let container, stats
-let camera, scene, renderer, gendCar, gendCar2, landscape, light, headlight1, headlight2
-
-let switchBack, frames = 0
+let camera, scene, renderer
+let gendCar, gendCar2, landscape
 
 init()
 animate()
@@ -40,9 +39,15 @@ function init() {
         z:0
     })
 
-    loadCollada(scene,'./model/megSecMont-gend/model.dae',gendCar2,{
-        y:-4
-    })
+    // loadCollada(scene,'./model/megSecMont-gend/model.dae',gendCar2,{
+    //     y:-4
+    // })
+
+    // loadCollada(scene,'./model/test/model.dae',gendCar,{})
+
+    loadCollada(scene,'./model/autoroute/model.dae',landscape,{x:-350,y:266})
+
+    // scene.add(createCube(0,0,0,0xffffff))
 
     // fbx
 
@@ -52,58 +57,15 @@ function init() {
     //     scene.add(object)
     // })
 
-    // cube
-
-    const cube = createCube(8,0,0,0x44aa88)
-    scene.add(cube)
-    scene.add(createCube(0,8,0,0xffffff))
-    scene.add(createCube(0,0,8,0xff0000))
-    scene.add(createCube(0,-8,0,0xf4fa7b))
-
-    // plan 
-
-    const geometry = new THREE.PlaneGeometry(28, 28)
-    const material = new THREE.MeshPhongMaterial({color: 'gray',side: THREE.DoubleSide})
-
-    const plane = new THREE.Mesh(geometry, material)
-    plane.rotation.x = Math.PI/2
-    // plane.translateZ(+0.02)
-    plane.receiveShadow = true
-    scene.add(plane)
-
     //
 
     const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4)
-    // scene.add(ambientLight)
+    scene.add(ambientLight)
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1)//0.8)
     directionalLight.position.set(1, 1, 0).normalize()
     // directionalLight.castShadow = true
-    // scene.add(directionalLight)
-
-    const sphere = new THREE.SphereGeometry(0.5, 16, 8)
-
-    light = new THREE.PointLight(0xfad6a5, 1, 100)
-    light.position.set(8, 8, 8)
-    light.add( new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({color: 0xfad6a5})))
-    light.castShadow = true
-    scene.add(light)
-
-    const sphere2 = new THREE.SphereGeometry(0.02, 16, 8)
-    const colorHeadlight = 0x44b8fc
-
-    headlight1 = new THREE.PointLight(colorHeadlight, 1, 100)
-    headlight1.position.set(0.25, 1.54, -0.4)
-    headlight1.add( new THREE.Mesh(sphere2, new THREE.MeshBasicMaterial({color: colorHeadlight})))
-    headlight1.castShadow = true
-    scene.add(headlight1)
-
-    headlight2 = new THREE.PointLight(colorHeadlight, 1, 100)
-    headlight2.copy(headlight1)
-    headlight2.position.z = 0.36
-    headlight2.visible = false
-    headlight2.castShadow = true
-    scene.add(headlight2)
+    scene.add(directionalLight)
 
     //
 
@@ -111,6 +73,7 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.shadowMap.enabled = true
+    // renderer.antialias = true
     container.appendChild(renderer.domElement)
 
     //
@@ -122,22 +85,16 @@ function init() {
     controls.update()
 
     // grid
-    const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
+    // const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
     // scene.add(gridHelper)
 
     // GUI
 
-    const gui = new GUI()
-    // const pointLightFolder = gui.addFolder('Gyrophares')
-    // pointLightFolder.add(headlight1,'visible')
-    // pointLightFolder.add(headlight1.position,'x')
-    // pointLightFolder.add(headlight1.position,'y')
-    // pointLightFolder.add(headlight1.position,'z')
-    // pointLightFolder.add(headlight1,'power')
-    // pointLightFolder.add(headlight2.position,'z',0,0.5,0.01)
-    // pointLightFolder.add(headlight2,'power')
-    const lightFolder = gui.addFolder('Lampadaire')
-    lightFolder.add(light,'visible')
+    // const gui = new GUI()
+    // const landFolder = gui.addFolder('Autoroute')
+    // landFolder.add(landscape.position,'x',-1000,1000,10)
+    // landFolder.add(landscape.position,'y',-1000,1000,10)
+    // landFolder.add(landscape.position,'z',-1000,1000,10)
 
     //
 
@@ -168,6 +125,12 @@ function loadCollada(scene,path,model,options) {
         noWireframe(model)
 
         makeShadow(model)
+
+    // const gui = new GUI()
+    // const landFolder = gui.addFolder('Autoroute')
+    // landFolder.add(model.position,'x',-1000,1000,10)
+    // landFolder.add(model.position,'y',-1000,1000,10)
+    // landFolder.add(model.position,'z',-272,-264,1)
 
         scene.add(model)
     })
@@ -227,32 +190,9 @@ function animate() {
 }
 
 function render() {
-    if (gendCar !== undefined) {
-        // gendCar.rotation.z += delta * 0.5
-    }
-
-    if (light !== undefined) {
-        if (Math.abs(light.position.x - 8) < 0.05) {
-            switchBack = true
-        }
-        if (Math.abs(light.position.x + 8) < 0.05) {
-            switchBack = false
-        }
-        // if (light.position.x > -8) {
-        if (switchBack) {
-            light.position.x -= 0.1
-        } else {
-            light.position.x += 0.1
-        }
-    }
-
-    if (headlight1 !== undefined && headlight2 !== undefined) {
-        if (frames++>12) {
-            headlight1.visible = !headlight1.visible
-            headlight2.visible = !headlight2.visible
-            frames = 0
-        }
-    }
+    // if (gendCar !== undefined) {
+    //     // gendCar.rotation.z += delta * 0.5
+    // }
 
     renderer.render(scene, camera)
 }
