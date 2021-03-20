@@ -8,7 +8,7 @@ import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.m
 let container, stats, controls
 let camera, scene, renderer
 let gendCar, gendCar2, landscape
-let movementX = 0, movementY = 0
+let movementX = 0, movementY = 0, rotation = false
 
 init()
 animate()
@@ -24,6 +24,7 @@ function init() {
 
     // collada
 
+    // Citroën
     // loadCollada(loadingManager,'./model/truc/model.dae',{
     //     name:'gend-car',
     //     y:-15.5,
@@ -31,8 +32,7 @@ function init() {
     //     z:+1.3
     // })
 
-    // loadCollada(scene,'./model/megSecMont-gend/model.dae',landscape,{})
-
+    // Mégane
     loadCollada(scene,'./model/meganeBizarre-gend/model.dae',gendCar,{
         name:'gend-car',
         y:-1,
@@ -40,15 +40,27 @@ function init() {
         z:0
     })
 
+    // Mégane secours montagne
     // loadCollada(scene,'./model/megSecMont-gend/model.dae',gendCar2,{
-    //     y:-4
+    //     name:'gend-car',
+    //     x:-0.5,
+    //     y:-1,
+    //     z:0
     // })
 
-    // loadCollada(scene,'./model/test/model.dae',gendCar,{})
+    // Voiture banalisée
+    // loadCollada(scene,'./model/ds-banal/model.dae',gendCar2,{
+    //     name:'gend-car',
+    //     x:1.5,
+    //     y:-2.5,
+    //     z:0
+    // })
 
+    // Travaux
+    // loadCollada(scene,'./model/travaux/model.dae',landscape,{})
+
+    // Autoroute
     loadCollada(scene,'./model/autoroute/model.dae',landscape,{x:-350,y:266})
-
-    // scene.add(createCube(0,0,0,0xffffff))
 
     // fbx
 
@@ -83,12 +95,14 @@ function init() {
     container.appendChild(stats.dom)
 
     controls = new OrbitControls(camera, renderer.domElement)
-    console.log(controls.target)
     controls.update()
 
     // grid
     // const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
     // scene.add(gridHelper)
+
+    // const axesHelper = new THREE.AxesHelper(5)
+    // scene.add(axesHelper)
 
     // GUI
 
@@ -129,10 +143,10 @@ function loadCollada(scene,path,model,options) {
         makeShadow(model)
 
         // const gui = new GUI()
-        // const landFolder = gui.addFolder('Autoroute')
-        // landFolder.add(model.position,'x',-1000,1000,10)
-        // landFolder.add(model.position,'y',-1000,1000,10)
-        // landFolder.add(model.position,'z',-272,-264,1)
+        // const landFolder = gui.addFolder('Voiture')
+        // landFolder.add(model.position,'x',-5,5,0.5)
+        // landFolder.add(model.position,'y',-5,5,0.5)
+        // landFolder.add(model.position,'z',-5,5,0.5)
         
         scene.add(model)
         gendCar = scene.getObjectByName('gend-car')
@@ -200,6 +214,11 @@ function render() {
         camera.position.x-=movementX
         camera.position.z-=movementY
 
+        if (rotation) {
+            console.log(gendCar.rotation)
+            gendCar.rotation.z += 0.1
+        }
+
         controls.target.x-=movementX
         controls.target.z-=movementY
         controls.update()
@@ -207,6 +226,7 @@ function render() {
 
     renderer.render(scene, camera)
 }
+
 let factormov = 0.5
 function handleKeyDown(e){
     // console.log(e.keyCode)
@@ -222,11 +242,15 @@ function handleKeyDown(e){
     if (e.keyCode == 38) {
         movementX = factormov
     }
+    if (e.keyCode == 32) {
+        rotation = true
+    }
 }
 
 function handleKeyUp(e){
     movementX = 0
     movementY = 0
+    rotation = false
 }
 
 document.addEventListener('keyup', handleKeyUp)
