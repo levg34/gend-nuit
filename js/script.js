@@ -5,9 +5,10 @@ import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/load
 import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.module'
 // import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
 
-let container, stats
+let container, stats, controls
 let camera, scene, renderer
 let gendCar, gendCar2, landscape
+let movementX = 0, movementY = 0
 
 init()
 animate()
@@ -81,7 +82,8 @@ function init() {
     stats = new Stats()
     container.appendChild(stats.dom)
 
-    const controls = new OrbitControls(camera, renderer.domElement)
+    controls = new OrbitControls(camera, renderer.domElement)
+    console.log(controls.target)
     controls.update()
 
     // grid
@@ -126,13 +128,14 @@ function loadCollada(scene,path,model,options) {
 
         makeShadow(model)
 
-    // const gui = new GUI()
-    // const landFolder = gui.addFolder('Autoroute')
-    // landFolder.add(model.position,'x',-1000,1000,10)
-    // landFolder.add(model.position,'y',-1000,1000,10)
-    // landFolder.add(model.position,'z',-272,-264,1)
-
+        // const gui = new GUI()
+        // const landFolder = gui.addFolder('Autoroute')
+        // landFolder.add(model.position,'x',-1000,1000,10)
+        // landFolder.add(model.position,'y',-1000,1000,10)
+        // landFolder.add(model.position,'z',-272,-264,1)
+        
         scene.add(model)
+        gendCar = scene.getObjectByName('gend-car')
     })
 }
 
@@ -190,9 +193,41 @@ function animate() {
 }
 
 function render() {
-    // if (gendCar !== undefined) {
-    //     // gendCar.rotation.z += delta * 0.5
-    // }
+    if (gendCar !== undefined) {
+        gendCar.position.x-=movementX
+        gendCar.position.z-=movementY
+
+        camera.position.x-=movementX
+        camera.position.z-=movementY
+
+        controls.target.x-=movementX
+        controls.target.z-=movementY
+        controls.update()
+    }
 
     renderer.render(scene, camera)
 }
+let factormov = 0.5
+function handleKeyDown(e){
+    // console.log(e.keyCode)
+    if (e.keyCode == 39) {
+        movementY = factormov
+    }
+    if (e.keyCode == 37) {
+        movementY = -factormov
+    }
+    if (e.keyCode == 40) {
+        movementX = -factormov
+    }
+    if (e.keyCode == 38) {
+        movementX = factormov
+    }
+}
+
+function handleKeyUp(e){
+    movementX = 0
+    movementY = 0
+}
+
+document.addEventListener('keyup', handleKeyUp)
+document.addEventListener('keydown', handleKeyDown)
