@@ -7,7 +7,7 @@ import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.m
 
 let container, stats, controls
 let camera, scene, renderer
-let gendCar, gendCar2, landscape
+let gendCar
 let movementX = 0, movementY = 0, rotation = false
 
 init()
@@ -24,24 +24,25 @@ function init() {
 
     // collada
 
-    // Citroën
-    // loadCollada(loadingManager,'./model/truc/model.dae',{
+    // Citroën gendCar
+    // loadCollada(scene,'./model/truc/model.dae',{
     //     name:'gend-car',
     //     y:-15.5,
     //     x:-1.1,
-    //     z:+1.3
+    //     z:+1.3,
+    //     rot:-Math.PI/2
     // })
 
-    // Mégane
-    loadCollada(scene,'./model/meganeBizarre-gend/model.dae',gendCar,{
-        name:'gend-car',
-        y:-1,
-        x:-2.2,
-        z:0
-    })
+    // Mégane gendCar
+    // loadCollada(scene,'./model/meganeBizarre-gend/model.dae',{
+    //     name:'gend-car',
+    //     y:-1,
+    //     x:-2.2,
+    //     z:0
+    // })
 
-    // Mégane secours montagne
-    // loadCollada(scene,'./model/megSecMont-gend/model.dae',gendCar2,{
+    // Mégane secours montagne gendC
+    // loadCollada(scene,'./model/megSecMont-gend/model.dae',{
     //     name:'gend-car',
     //     x:-0.5,
     //     y:-1,
@@ -49,18 +50,19 @@ function init() {
     // })
 
     // Voiture banalisée
-    // loadCollada(scene,'./model/ds-banal/model.dae',gendCar2,{
-    //     name:'gend-car',
-    //     x:1.5,
-    //     y:-2.5,
-    //     z:0
-    // })
+    loadCollada(scene,'./model/ds-banal/model.dae',{
+        name:'gend-car',
+        x:1.5,
+        y:-2.5,
+        z:0,
+        rot:-Math.PI/2
+    })
 
     // Travaux
-    // loadCollada(scene,'./model/travaux/model.dae',landscape,{})
+    // loadCollada(scene,'./model/travaux/model.dae',{})
 
     // Autoroute
-    loadCollada(scene,'./model/autoroute/model.dae',landscape,{x:-350,y:266})
+    loadCollada(scene,'./model/autoroute/model.dae',{x:-350,y:266})
 
     // fbx
 
@@ -117,10 +119,10 @@ function init() {
     window.addEventListener('resize', onWindowResize)
 }
 
-function loadCollada(scene,path,model,options) {
+function loadCollada(scene,path,options) {
     const loader = new ColladaLoader()
     loader.load(path, function (collada) {
-        model = collada.scene
+        const model = collada.scene
 
         if (options) {
             if (options.name) {
@@ -147,9 +149,17 @@ function loadCollada(scene,path,model,options) {
         // landFolder.add(model.position,'x',-5,5,0.5)
         // landFolder.add(model.position,'y',-5,5,0.5)
         // landFolder.add(model.position,'z',-5,5,0.5)
-        
-        scene.add(model)
-        gendCar = scene.getObjectByName('gend-car')
+
+        if (options.name === 'gend-car') {
+            gendCar = new THREE.Object3D()
+            gendCar.add(model)
+            if (options.rot) {
+                gendCar.rotation.y += options.rot
+            }
+            scene.add(gendCar)
+        } else {
+            scene.add(model)
+        }
     })
 }
 
@@ -209,18 +219,17 @@ function animate() {
 function render() {
     if (gendCar !== undefined) {
         gendCar.position.x-=movementX
-        gendCar.position.z-=movementY
+        // gendCar.position.z-=movementY
+
+        // if (rotation) {
+            gendCar.rotation.y -= movementY/10
+        // }
 
         camera.position.x-=movementX
-        camera.position.z-=movementY
-
-        if (rotation) {
-            console.log(gendCar.rotation)
-            gendCar.rotation.z += 0.1
-        }
+        // camera.position.z-=movementY
 
         controls.target.x-=movementX
-        controls.target.z-=movementY
+        // controls.target.z-=movementY
         controls.update()
     }
 
@@ -243,7 +252,7 @@ function handleKeyDown(e){
         movementX = factormov
     }
     if (e.keyCode == 32) {
-        rotation = true
+        // rotation = true
     }
 }
 
