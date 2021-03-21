@@ -151,6 +151,7 @@ function loadCollada(path,options) {
             scene.add(gendCar)
             button.innerText = buttonText
             button.disabled = gendCarSelect.disabled = false
+            button.style.cursor = 'pointer'
         } else {
             scene.add(model)
         }
@@ -259,6 +260,7 @@ function handleKeyUp(e){
 function loadSelectedGendCar(name) {
     button.innerText = 'Patientez...'
     button.disabled = gendCarSelect.disabled = true
+    button.style.cursor = 'wait'
     loadGendCar(name ? name : gendCarSelect.value)
 }
 
