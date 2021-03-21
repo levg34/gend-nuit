@@ -11,6 +11,10 @@ let camera, scene, renderer
 let gendCar
 let movementX = 0, movementY = 0, rotation = false
 
+const gendCarSelect = document.getElementById('gendCarSelect')
+const button = document.getElementById('button1')
+const buttonText = button.innerText
+
 init()
 animate()
 
@@ -26,7 +30,7 @@ function init() {
     // collada
 
     loadModel('landscape','Autoroute')
-    loadModel('gendCar','Berlingo')
+    loadSelectedGendCar('Berlingo')
 
     // fbx
 
@@ -84,9 +88,9 @@ function init() {
 }
 
 function loadModel(type,name) {
-    const car = models[type].find(car => car.name === name)
-    if (car !== undefined) {
-        loadCollada(car.path,car.options)
+    const model = models[type].find(model => model.name === name)
+    if (model !== undefined) {
+        loadCollada(model.path,model.options)
     } else {
         console.error('Modèle introuvable : '+name)
     }
@@ -100,9 +104,11 @@ function removeGendCar() {
 
 function loadGendCar(name) {
     removeGendCar()
-    camera.position.set(8, 10, 8)
-    camera.lookAt(0, 0, 0)
-    controls.target.set(0,0,0)
+    if (controls !== undefined && camera !== undefined) {
+        camera.position.set(8, 10, 8)
+        camera.lookAt(0, 0, 0)
+        controls.target.set(0,0,0)
+    }
     loadModel('gendCar',name)
 }
 
@@ -143,6 +149,8 @@ function loadCollada(path,options) {
                 gendCar.rotation.y += options.rot
             }
             scene.add(gendCar)
+            button.innerText = buttonText
+            button.disabled = gendCarSelect.disabled = false
         } else {
             scene.add(model)
         }
@@ -248,16 +256,21 @@ function handleKeyUp(e){
     rotation = false
 }
 
+function loadSelectedGendCar(name) {
+    button.innerText = 'Patientez...'
+    button.disabled = gendCarSelect.disabled = true
+    loadGendCar(name ? name : gendCarSelect.value)
+}
+
 document.addEventListener('keyup', handleKeyUp)
 document.addEventListener('keydown', handleKeyDown)
 
-const gendCarSelect = document.getElementById('gendCarSelect')
 models.gendCar.forEach(car => {
     const opt = document.createElement('option')
     opt.value = opt.innerText = car.name
     gendCarSelect.appendChild(opt)
 })
 
-document.getElementById('button1').addEventListener('click',() => {
-    loadGendCar(gendCarSelect.value)
+button.addEventListener('click',() => {
+    loadSelectedGendCar()
 })
