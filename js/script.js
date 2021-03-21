@@ -25,56 +25,9 @@ function init() {
 
     // collada
 
-    // Citroën gendCar
-    // loadCollada('./model/truc/model.dae',{
-    //     name:'gend-car',
-    //     y:-15.5,
-    //     x:-1.1,
-    //     z:+1.3,
-    //     rot:-Math.PI/2
-    // })
+    loadModel('gendCar','Berlingo')
 
-    // Mégane gendCar
-    // loadCollada('./model/meganeBizarre-gend/model.dae',{
-    //     name:'gend-car',
-    //     y:-1,
-    //     x:-2.2,
-    //     z:0
-    // })
-
-    // Mégane secours montagne gendC
-    // loadCollada('./model/megSecMont-gend/model.dae',{
-    //     name:'gend-car',
-    //     x:-0.5,
-    //     y:-1,
-    //     z:0
-    // })
-
-    // Voiture banalisée
-    // loadCollada('./model/ds-banal/model.dae',{
-    //     name:'gend-car',
-    //     x:1.5,
-    //     y:-2.5,
-    //     z:0,
-    //     rot:-Math.PI/2
-    // })
-
-    // loadCollada('./model/berlingo-gend/model.dae',{
-    //     name: 'gend-car',
-    //     x:0,
-    //     y:0,
-    //     z:0,
-    //     rot:-Math.PI/2
-    // })
-
-    loadModel('Berlingo')
-    // loadModel('Mégane')
-
-    // Travaux
-    // loadCollada('./model/travaux/model.dae',{})
-
-    // Autoroute
-    loadCollada('./model/autoroute/model.dae',{x:-350,y:266})
+    loadModel('landscape','Autoroute')
 
     // fbx
 
@@ -111,12 +64,12 @@ function init() {
     controls = new OrbitControls(camera, renderer.domElement)
     controls.update()
 
-    // grid
-    const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
-    scene.add(gridHelper)
+    // helpers
+    // const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
+    // scene.add(gridHelper)
 
-    const axesHelper = new THREE.AxesHelper(5)
-    scene.add(axesHelper)
+    // const axesHelper = new THREE.AxesHelper(5)
+    // scene.add(axesHelper)
 
     // GUI
 
@@ -131,8 +84,8 @@ function init() {
     window.addEventListener('resize', onWindowResize)
 }
 
-function loadModel(name) {
-    const car = models.gendCar.find(car => car.name === name)
+function loadModel(type,name) {
+    const car = models[type].find(car => car.name === name)
     if (car !== undefined) {
         loadCollada(car.path,car.options)
     } else {
@@ -165,11 +118,11 @@ function loadCollada(path,options) {
 
         makeShadow(model)
 
-        const gui = new GUI()
-        const landFolder = gui.addFolder('Voiture')
-        landFolder.add(model.position,'x',-15,15,0.5)
-        landFolder.add(model.position,'y',-15,15,0.5)
-        landFolder.add(model.position,'z',-15,15,0.5)
+        // const gui = new GUI()
+        // const landFolder = gui.addFolder('Voiture')
+        // landFolder.add(model.position,'x',-15,15,0.5)
+        // landFolder.add(model.position,'y',-15,15,0.5)
+        // landFolder.add(model.position,'z',-15,15,0.5)
 
         if (options.name === 'gend-car') {
             gendCar = new THREE.Object3D()
