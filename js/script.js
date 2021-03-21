@@ -25,7 +25,7 @@ function init() {
     // collada
 
     // Citroën gendCar
-    // loadCollada(scene,'./model/truc/model.dae',{
+    // loadCollada('./model/truc/model.dae',{
     //     name:'gend-car',
     //     y:-15.5,
     //     x:-1.1,
@@ -34,7 +34,7 @@ function init() {
     // })
 
     // Mégane gendCar
-    // loadCollada(scene,'./model/meganeBizarre-gend/model.dae',{
+    // loadCollada('./model/meganeBizarre-gend/model.dae',{
     //     name:'gend-car',
     //     y:-1,
     //     x:-2.2,
@@ -42,7 +42,7 @@ function init() {
     // })
 
     // Mégane secours montagne gendC
-    // loadCollada(scene,'./model/megSecMont-gend/model.dae',{
+    // loadCollada('./model/megSecMont-gend/model.dae',{
     //     name:'gend-car',
     //     x:-0.5,
     //     y:-1,
@@ -50,7 +50,7 @@ function init() {
     // })
 
     // Voiture banalisée
-    loadCollada(scene,'./model/ds-banal/model.dae',{
+    loadCollada('./model/ds-banal/model.dae',{
         name:'gend-car',
         x:1.5,
         y:-2.5,
@@ -59,10 +59,10 @@ function init() {
     })
 
     // Travaux
-    // loadCollada(scene,'./model/travaux/model.dae',{})
+    // loadCollada('./model/travaux/model.dae',{})
 
     // Autoroute
-    loadCollada(scene,'./model/autoroute/model.dae',{x:-350,y:266})
+    loadCollada('./model/autoroute/model.dae',{x:-350,y:266})
 
     // fbx
 
@@ -119,7 +119,7 @@ function init() {
     window.addEventListener('resize', onWindowResize)
 }
 
-function loadCollada(scene,path,options) {
+function loadCollada(path,options) {
     const loader = new ColladaLoader()
     loader.load(path, function (collada) {
         const model = collada.scene
