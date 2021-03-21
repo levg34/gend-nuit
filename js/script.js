@@ -25,9 +25,8 @@ function init() {
 
     // collada
 
-    loadModel('gendCar','Berlingo')
-
     loadModel('landscape','Autoroute')
+    loadModel('gendCar','Berlingo')
 
     // fbx
 
@@ -115,7 +114,6 @@ function loadCollada(path,options) {
         }
 
         noWireframe(model)
-
         makeShadow(model)
 
         // const gui = new GUI()
