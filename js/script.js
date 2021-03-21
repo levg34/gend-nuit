@@ -20,6 +20,7 @@ animate()
 
 function init() {
     container = document.getElementById('container')
+    document.body.style.cursor = 'wait'
 
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000)
     camera.position.set(8, 10, 8)
@@ -149,9 +150,11 @@ function loadCollada(path,options) {
                 gendCar.rotation.y += options.rot
             }
             scene.add(gendCar)
+
             button.innerText = buttonText
             button.disabled = gendCarSelect.disabled = false
-            button.style.cursor = 'pointer'
+            button.style.cursor = gendCarSelect.style.cursor = 'pointer'
+            document.body.style.cursor = 'move'
         } else {
             scene.add(model)
         }
@@ -260,7 +263,7 @@ function handleKeyUp(e){
 function loadSelectedGendCar(name) {
     button.innerText = 'Patientez...'
     button.disabled = gendCarSelect.disabled = true
-    button.style.cursor = 'wait'
+    button.style.cursor = document.body.style.cursor = 'wait'
     loadGendCar(name ? name : gendCarSelect.value)
 }
 
