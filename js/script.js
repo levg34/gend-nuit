@@ -4,6 +4,7 @@ import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.modul
 import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/ColladaLoader.js'
 import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.module'
 // import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
+import models from '../data/models.js'
 
 let container, stats, controls
 let camera, scene, renderer
@@ -50,13 +51,24 @@ function init() {
     // })
 
     // Voiture banalisée
-    loadCollada('./model/ds-banal/model.dae',{
-        name:'gend-car',
-        x:1.5,
-        y:-2.5,
-        z:0,
-        rot:-Math.PI/2
-    })
+    // loadCollada('./model/ds-banal/model.dae',{
+    //     name:'gend-car',
+    //     x:1.5,
+    //     y:-2.5,
+    //     z:0,
+    //     rot:-Math.PI/2
+    // })
+
+    // loadCollada('./model/berlingo-gend/model.dae',{
+    //     name: 'gend-car',
+    //     x:0,
+    //     y:0,
+    //     z:0,
+    //     rot:-Math.PI/2
+    // })
+
+    loadModel('Berlingo')
+    // loadModel('Mégane')
 
     // Travaux
     // loadCollada('./model/travaux/model.dae',{})
@@ -100,11 +112,11 @@ function init() {
     controls.update()
 
     // grid
-    // const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
-    // scene.add(gridHelper)
+    const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
+    scene.add(gridHelper)
 
-    // const axesHelper = new THREE.AxesHelper(5)
-    // scene.add(axesHelper)
+    const axesHelper = new THREE.AxesHelper(5)
+    scene.add(axesHelper)
 
     // GUI
 
@@ -117,6 +129,15 @@ function init() {
     //
 
     window.addEventListener('resize', onWindowResize)
+}
+
+function loadModel(name) {
+    const car = models.gendCar.find(car => car.name === name)
+    if (car !== undefined) {
+        loadCollada(car.path,car.options)
+    } else {
+        console.error('Modèle introuvable : '+name)
+    }
 }
 
 function loadCollada(path,options) {
@@ -144,11 +165,11 @@ function loadCollada(path,options) {
 
         makeShadow(model)
 
-        // const gui = new GUI()
-        // const landFolder = gui.addFolder('Voiture')
-        // landFolder.add(model.position,'x',-5,5,0.5)
-        // landFolder.add(model.position,'y',-5,5,0.5)
-        // landFolder.add(model.position,'z',-5,5,0.5)
+        const gui = new GUI()
+        const landFolder = gui.addFolder('Voiture')
+        landFolder.add(model.position,'x',-15,15,0.5)
+        landFolder.add(model.position,'y',-15,15,0.5)
+        landFolder.add(model.position,'z',-15,15,0.5)
 
         if (options.name === 'gend-car') {
             gendCar = new THREE.Object3D()
