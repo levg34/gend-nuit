@@ -92,6 +92,20 @@ function loadModel(type,name) {
     }
 }
 
+function removeGendCar() {
+    if (gendCar !== undefined) {
+        scene.remove(gendCar)
+    }
+}
+
+function loadGendCar(name) {
+    removeGendCar()
+    camera.position.set(8, 10, 8)
+    camera.lookAt(0, 0, 0)
+    controls.target.set(0,0,0)
+    loadModel('gendCar',name)
+}
+
 function loadCollada(path,options) {
     const loader = new ColladaLoader()
     loader.load(path, function (collada) {
@@ -236,3 +250,14 @@ function handleKeyUp(e){
 
 document.addEventListener('keyup', handleKeyUp)
 document.addEventListener('keydown', handleKeyDown)
+
+const gendCarSelect = document.getElementById('gendCarSelect')
+models.gendCar.forEach(car => {
+    const opt = document.createElement('option')
+    opt.value = opt.innerText = car.name
+    gendCarSelect.appendChild(opt)
+})
+
+document.getElementById('button1').addEventListener('click',() => {
+    loadGendCar(gendCarSelect.value)
+})
