@@ -3,7 +3,7 @@ import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/cont
 import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.module.js'
 import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/ColladaLoader.js'
 import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.module'
-// import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
+import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
 import { KMZLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/KMZLoader.js'
 import models from '../data/models.js'
 
@@ -32,15 +32,15 @@ function init() {
     // collada
 
     loadModel('landscape','Autoroute')
-    loadSelectedGendCar('Berlingo')
+    loadSelectedGendCar('Kangoo')
 
-    const loader = new KMZLoader()
-    loader.load('./model/KangooGendarmerie.kmz', function (kmz) {
-        kmz.scene.position.z = -2
-        kmz.scene.position.x = -18
-        scene.add(kmz.scene)
-        // render()
-    })
+    // const loader = new KMZLoader()
+    // loader.load('./model/KangooGendarmerie.kmz', function (kmz) {
+    //     kmz.scene.position.z = -2
+    //     kmz.scene.position.x = -18
+    //     scene.add(kmz.scene)
+    //     // render()
+    // })
 
     // fbx
 
@@ -101,7 +101,10 @@ function init() {
 function loadModel(type,name) {
     const model = models[type].find(model => model.name === name)
     if (model !== undefined) {
-        loadCollada(model.path,model.options)
+        if (type === 'gendCar' && model.options) {
+            model.options.name = 'gend-car'
+        }
+        loadGeneral(model.path,model.options)
     } else {
         console.error('Modèle introuvable : '+name)
     }
@@ -123,8 +126,21 @@ function loadGendCar(name) {
     loadModel('gendCar',name)
 }
 
-function loadCollada(path,options) {
-    const loader = new ColladaLoader()
+function loadGeneral(path,options) {
+    let loader
+    const ext = path.split('.').pop()
+
+    if (ext === 'dae') {
+        loader = new ColladaLoader()
+    } else if (ext === 'kmz') {
+        loader = new KMZLoader()
+    } else if (ext.toLowerString() === 'fbx') {
+        loader = new FBXLoader()
+    } else {
+        console.error('Type non reconnu')
+        return
+    }
+
     loader.load(path, function (collada) {
         const model = collada.scene
 
@@ -144,7 +160,9 @@ function loadCollada(path,options) {
             }
         }
 
-        noWireframe(model)
+        if (loader instanceof ColladaLoader) {
+            noWireframe(model)
+        }
         makeShadow(model)
 
         // const gui = new GUI()
