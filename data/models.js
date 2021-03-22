@@ -96,5 +96,12 @@ export default {
                 y:2,
             }
         },
+        {
+            name: 'Autoroute A9 - Le Boulou',
+            path: './model/autoroute-boulou.kmz',
+            options: {
+                // y:2,
+            }
+        },
     ]
 }
