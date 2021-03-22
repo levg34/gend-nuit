@@ -172,11 +172,11 @@ function loadGeneral(path,options) {
         }
         makeShadow(model)
 
-        const gui = new GUI()
-        const landFolder = gui.addFolder('Model')
-        landFolder.add(model.position,'x',-0,10,1) // -40
-        landFolder.add(model.position,'y',-100,100,10) // 19
-        landFolder.add(model.position,'z',-10,0,1) // 10
+        // const gui = new GUI()
+        // const landFolder = gui.addFolder('Model')
+        // landFolder.add(model.position,'x',-0,10,1) // -40
+        // landFolder.add(model.position,'y',-100,100,10) // 19
+        // landFolder.add(model.position,'z',-10,0,1) // 10
 
         if (options && options.name === 'gend-car') {
             gendCar = new THREE.Object3D()
