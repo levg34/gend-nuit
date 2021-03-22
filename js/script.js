@@ -25,7 +25,7 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000)
     camera.position.set(8, 10, 8)
-    camera.lookAt(0, 0, 0)
+    camera.lookAt(0, 1, 0)
 
     scene = new THREE.Scene()
 
@@ -76,6 +76,7 @@ function init() {
 
     controls = new OrbitControls(camera, renderer.domElement)
     controls.maxPolarAngle = Math.PI/2-0.02
+    controls.target.set(0,1,0)
     controls.update()
 
     // helpers
@@ -120,8 +121,8 @@ function loadGendCar(name) {
     removeGendCar()
     if (controls !== undefined && camera !== undefined) {
         camera.position.set(8, 10, 8)
-        camera.lookAt(0, 0, 0)
-        controls.target.set(0,0,0)
+        camera.lookAt(0, 1, 0)
+        controls.target.set(0,1,0)
     }
     loadModel('gendCar',name)
 }
