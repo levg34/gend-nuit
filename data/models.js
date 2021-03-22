@@ -71,6 +71,16 @@ export default {
                 x: -350,
                 y: 266
             }
-        }
+        },
+        {
+            name: 'Autoroute avec pont',
+            path: './model/autoroute-pont/model.dae',
+            options: {
+                x: -40,
+                z: 19,
+                y: -10
+            }
+        },
+        
     ]
 }
