@@ -85,9 +85,15 @@ export default {
             name: 'Autoroute sortie',
             path: './model/autoroute-sortie/model.dae',
             options: {
-                //(10,0,-6)
                 y:6,
                 x:10
+            }
+        },
+        {
+            name: 'Départementale',
+            path: './model/departementale/model.dae',
+            options: {
+                y:2,
             }
         },
     ]
