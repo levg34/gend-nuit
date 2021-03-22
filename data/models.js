@@ -81,6 +81,14 @@ export default {
                 y: -10
             }
         },
-        
+        {
+            name: 'Autoroute sortie',
+            path: './model/autoroute-sortie/model.dae',
+            options: {
+                //(10,0,-6)
+                y:6,
+                x:10
+            }
+        },
     ]
 }
