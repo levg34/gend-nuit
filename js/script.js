@@ -76,6 +76,8 @@ function init() {
 
     controls = new OrbitControls(camera, renderer.domElement)
     controls.maxPolarAngle = Math.PI/2-0.02
+    controls.minDistance = 5
+    controls.maxDistance = 50
     controls.target.set(0,1,0)
     controls.update()
 
@@ -93,6 +95,9 @@ function init() {
     // landFolder.add(landscape.position,'x',-1000,1000,10)
     // landFolder.add(landscape.position,'y',-1000,1000,10)
     // landFolder.add(landscape.position,'z',-1000,1000,10)
+    // const orbitFolder = gui.addFolder('Orbit')
+    // orbitFolder.add(controls,'minDistance',0,100,5)
+    // orbitFolder.add(controls,'maxDistance',0,100,10)
 
     //
 
