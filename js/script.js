@@ -31,7 +31,7 @@ function init() {
 
     // collada
 
-    loadModel('landscape','Autoroute sortie')
+    loadModel('landscape','Départementale')
     loadSelectedGendCar('Kangoo')
 
     // const loader = new KMZLoader()
