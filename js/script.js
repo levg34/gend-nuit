@@ -32,6 +32,7 @@ function init() {
     // collada
 
     loadModel('landscape','Départementale')
+    // loadModel('landscape','Autoroute A9 - Le Boulou')
     loadSelectedGendCar('Kangoo')
 
     // const loader = new KMZLoader()
