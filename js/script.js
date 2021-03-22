@@ -4,6 +4,7 @@ import Stats from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/stats.modul
 import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/ColladaLoader.js'
 import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.module'
 // import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
+import { KMZLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/KMZLoader.js'
 import models from '../data/models.js'
 
 let container, stats, controls
@@ -32,6 +33,14 @@ function init() {
 
     loadModel('landscape','Autoroute')
     loadSelectedGendCar('Berlingo')
+
+    const loader = new KMZLoader()
+    loader.load('./model/KangooGendarmerie.kmz', function (kmz) {
+        kmz.scene.position.z = -2
+        kmz.scene.position.x = -18
+        scene.add(kmz.scene)
+        // render()
+    })
 
     // fbx
 
@@ -66,6 +75,7 @@ function init() {
     container.appendChild(stats.dom)
 
     controls = new OrbitControls(camera, renderer.domElement)
+    controls.maxPolarAngle = Math.PI/2-0.02
     controls.update()
 
     // helpers
@@ -143,7 +153,7 @@ function loadCollada(path,options) {
         // landFolder.add(model.position,'y',-15,15,0.5)
         // landFolder.add(model.position,'z',-15,15,0.5)
 
-        if (options.name === 'gend-car') {
+        if (options && options.name === 'gend-car') {
             gendCar = new THREE.Object3D()
             gendCar.add(model)
             if (options.rot) {
