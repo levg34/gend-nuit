@@ -31,7 +31,7 @@ function init() {
 
     // collada
 
-    loadModel('landscape','Autoroute avec pont')
+    loadModel('landscape','Autoroute sortie')
     loadSelectedGendCar('Kangoo')
 
     // const loader = new KMZLoader()
@@ -173,9 +173,9 @@ function loadGeneral(path,options) {
 
         const gui = new GUI()
         const landFolder = gui.addFolder('Model')
-        landFolder.add(model.position,'x',-40,0,1) // -40
-        landFolder.add(model.position,'y',0,20,1) // 19
-        landFolder.add(model.position,'z',0,10,10) // 10
+        landFolder.add(model.position,'x',-0,10,1) // -40
+        landFolder.add(model.position,'y',-100,100,10) // 19
+        landFolder.add(model.position,'z',-10,0,1) // 10
 
         if (options && options.name === 'gend-car') {
             gendCar = new THREE.Object3D()
