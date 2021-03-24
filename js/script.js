@@ -9,7 +9,7 @@ import models from '../data/models.js'
 
 let container, stats, controls
 let camera, scene, renderer
-let gendCar
+let gendCar, landscape
 let movementX = 0, movementY = 0, rotation = false
 
 const gendCarSelect = document.getElementById('gendCarSelect')
@@ -31,7 +31,7 @@ function init() {
 
     // collada
 
-    loadModel('landscape','Départementale')
+    landscape = loadModel('landscape','Départementale')
     // loadModel('landscape','Autoroute sortie')
     // loadModel('landscape','Autoroute A9 - Le Boulou')
     loadSelectedGendCar('Kangoo')
@@ -147,6 +147,7 @@ function loadModel(type,name) {
     } else {
         console.error('Modèle introuvable : '+name)
     }
+    return model
 }
 
 function removeGendCar() {
@@ -287,6 +288,19 @@ function render() {
         gendCar.position.x-=movementX
         // gendCar.position.z-=movementY
 
+        if (gendCar.position.x < landscape.values.maxX) {
+            gendCar.position.x = 0
+            camera.position.x -= landscape.values.maxX 
+            controls.target.x = 0
+        }
+
+        if (gendCar.position.x > 0) {
+            gendCar.position.x = landscape.values.maxX
+            camera.position.x -= -landscape.values.maxX
+            controls.target.x = landscape.values.maxX
+        }
+
+        document.getElementById('debug').innerHTML = `gendCar.position.x : ${gendCar.position.x}<br>gendCar.rotation.y : ${gendCar.rotation.y}`
         // if (rotation) {
             gendCar.rotation.y -= movementY/10
         // }
