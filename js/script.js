@@ -9,8 +9,8 @@ import models from '../data/models.js'
 
 let container, stats, controls
 let camera, scene, renderer
-let gendCar, landscape
-let movementX = 0, movementY = 0, rotation = false
+let gendCar, gendCarInfos, landscape
+let movementX = 0, rotationY = 0, rotation = false
 
 const gendCarSelect = document.getElementById('gendCarSelect')
 const button = document.getElementById('button1')
@@ -163,7 +163,7 @@ function loadGendCar(name) {
         camera.lookAt(0, 1, 0)
         controls.target.set(0,1,0)
     }
-    loadModel('gendCar',name)
+    gendCarInfos = loadModel('gendCar',name)
 }
 
 function loadGeneral(path,options) {
@@ -285,8 +285,16 @@ function animate() {
 
 function render() {
     if (gendCar !== undefined) {
-        gendCar.position.x-=movementX
-        // gendCar.position.z-=movementY
+        const gendCarRotY = gendCarInfos.options.rot ? gendCar.rotation.y - gendCarInfos.options.rot : gendCar.rotation.y
+        const depX = movementX*Math.cos(gendCarRotY)
+        const depZ = -movementX*Math.sin(gendCarRotY)
+
+        document.getElementById('debug').innerHTML = `gendCar.position.x : ${gendCar.position.x}<br>
+                                                      gendCar.position.y : ${gendCar.position.y}<br>
+                                                      gendCar.rotation.y : ${gendCarRotY}`
+
+        gendCar.position.x-=depX
+        gendCar.position.z-=depZ
 
         if (gendCar.position.x < landscape.values.maxX) {
             gendCar.position.x = 0
@@ -300,16 +308,13 @@ function render() {
             controls.target.x = landscape.values.maxX
         }
 
-        document.getElementById('debug').innerHTML = `gendCar.position.x : ${gendCar.position.x}<br>gendCar.rotation.y : ${gendCar.rotation.y}`
-        // if (rotation) {
-            gendCar.rotation.y -= movementY/10
-        // }
+        gendCar.rotation.y -= rotationY/10
 
-        camera.position.x-=movementX
-        // camera.position.z-=movementY
+        camera.position.x-=depX
+        camera.position.z-=depZ
 
-        controls.target.x-=movementX
-        // controls.target.z-=movementY
+        controls.target.x-=depX
+        controls.target.z-=depZ
         controls.update()
     }
 
@@ -320,10 +325,10 @@ let factormov = 0.5
 function handleKeyDown(e){
     // console.log(e.keyCode)
     if (e.keyCode == 39) {
-        movementY = factormov
+        rotationY = factormov
     }
     if (e.keyCode == 37) {
-        movementY = -factormov
+        rotationY = -factormov
     }
     if (e.keyCode == 40) {
         movementX = -factormov
@@ -338,7 +343,7 @@ function handleKeyDown(e){
 
 function handleKeyUp(e){
     movementX = 0
-    movementY = 0
+    rotationY = 0
     rotation = false
 }
 
