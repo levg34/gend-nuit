@@ -94,6 +94,11 @@ export default {
             path: './model/departementale/model.dae',
             options: {
                 y:2,
+            },
+            values: {
+                minX: 0,
+                changeX: -190,
+                maxX: -330
             }
         },
         {
