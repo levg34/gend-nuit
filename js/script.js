@@ -32,6 +32,7 @@ function init() {
     // collada
 
     loadModel('landscape','Départementale')
+    // loadModel('landscape','Autoroute sortie')
     // loadModel('landscape','Autoroute A9 - Le Boulou')
     loadSelectedGendCar('Kangoo')
 
@@ -56,10 +57,21 @@ function init() {
     const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4)
     scene.add(ambientLight)
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1)//0.8)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8)
     directionalLight.position.set(1, 1, 0).normalize()
     // directionalLight.castShadow = true
     scene.add(directionalLight)
+
+    const spotLight = new THREE.SpotLight(0xffffff)
+    spotLight.position.set(-2, 1, 0)
+    spotLight.target.position.set(-100, 1, 0)
+    spotLight.angle = Math.PI/6
+    spotLight.castShadow = true
+    // scene.add(spotLight)
+    // scene.add(spotLight.target)
+
+    // const helper = new THREE.SpotLightHelper(spotLight);
+    // scene.add(helper);
 
     //
 
@@ -79,6 +91,7 @@ function init() {
     controls.maxPolarAngle = Math.PI/2-0.02
     controls.minDistance = 5
     controls.maxDistance = 50
+    controls.enablePan = false
     controls.target.set(0,1,0)
     controls.update()
 
@@ -92,6 +105,22 @@ function init() {
     // GUI
 
     // const gui = new GUI()
+    // const lightFolder = gui.addFolder('Lights')
+    // lightFolder.add(spotLight.position,'x',-5,5,0.5).onChange(() => {
+    //     spotLight.target.updateMatrixWorld
+    //     helper.update
+    // })
+    // lightFolder.add(spotLight.position,'y',-5,5,0.5).onChange(() => {
+    //     spotLight.target.updateMatrixWorld
+    //     helper.update
+    // })
+    // lightFolder.add(spotLight.position,'z',-5,5,0.5).onChange(() => {
+    //     spotLight.target.updateMatrixWorld
+    //     helper.update
+    // })
+    // lightFolder.add(spotLight.target.position,'x',-50,50,0.5)
+    // lightFolder.add(spotLight.target.position,'y',-50,50,0.5)
+    // lightFolder.add(spotLight.target.position,'z',-50,50,0.5)
     // const landFolder = gui.addFolder('Autoroute')
     // landFolder.add(landscape.position,'x',-1000,1000,10)
     // landFolder.add(landscape.position,'y',-1000,1000,10)
@@ -108,8 +137,11 @@ function init() {
 function loadModel(type,name) {
     const model = models[type].find(model => model.name === name)
     if (model !== undefined) {
-        if (type === 'gendCar' && model.options) {
-            model.options.name = 'gend-car'
+        if (model.options === undefined) {
+            model.options = {}
+        }
+        if (type === 'gendCar') {
+            model.options.name = 'gendCar'
         }
         loadGeneral(model.path,model.options)
     } else {
@@ -178,7 +210,7 @@ function loadGeneral(path,options) {
         // landFolder.add(model.position,'y',-100,100,10) // 19
         // landFolder.add(model.position,'z',-10,0,1) // 10
 
-        if (options && options.name === 'gend-car') {
+        if (options && options.name === 'gendCar') {
             gendCar = new THREE.Object3D()
             gendCar.add(model)
             if (options.rot) {
@@ -200,6 +232,7 @@ function makeShadow(object) {
     object.traverse(o => {
         if (o.isMesh) {
             o.castShadow = true
+            o.receiveShadow = true
         }
     })
 }
