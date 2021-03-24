@@ -31,9 +31,12 @@ function init() {
 
     // collada
 
-    landscape = loadModel('landscape','Départementale')
-    // loadModel('landscape','Autoroute sortie')
-    // loadModel('landscape','Autoroute A9 - Le Boulou')
+    loadLandscape('Départementale')
+    // loadLandscape('Autoroute sortie')
+    // loadLandscape('Autoroute A9 - Le Boulou')
+    // loadLandscape('Travaux')
+    // loadLandscape('Autoroute')
+    // loadLandscape('Autoroute avec pont')
     loadSelectedGendCar('Kangoo')
 
     // const loader = new KMZLoader()
@@ -296,16 +299,18 @@ function render() {
         gendCar.position.x-=depX
         gendCar.position.z-=depZ
 
-        if (gendCar.position.x < landscape.values.maxX) {
-            gendCar.position.x = 0
-            camera.position.x -= landscape.values.maxX 
-            controls.target.x = 0
-        }
-
-        if (gendCar.position.x > 0) {
-            gendCar.position.x = landscape.values.maxX
-            camera.position.x -= -landscape.values.maxX
-            controls.target.x = landscape.values.maxX
+        if (landscape.values && landscape.values.maxX) {
+            if (gendCar.position.x < landscape.values.maxX) {
+                gendCar.position.x = 0
+                camera.position.x -= landscape.values.maxX 
+                controls.target.x = 0
+            }
+    
+            if (gendCar.position.x > 0) {
+                gendCar.position.x = landscape.values.maxX
+                camera.position.x -= -landscape.values.maxX
+                controls.target.x = landscape.values.maxX
+            }
         }
 
         gendCar.rotation.y -= rotationY/10
@@ -352,6 +357,10 @@ function loadSelectedGendCar(name) {
     button.disabled = gendCarSelect.disabled = true
     button.style.cursor = document.body.style.cursor = 'wait'
     loadGendCar(name ? name : gendCarSelect.value)
+}
+
+function loadLandscape(name) {
+    landscape = loadModel('landscape',name)
 }
 
 document.addEventListener('keyup', handleKeyUp)
