@@ -1,2 +1,2 @@
 # gend-nuit
-Un truc sympa
+Tentative de créer un jeu ayant pour thème la gendarmerie, dans une ambiance nocturne relaxante.
