@@ -313,7 +313,11 @@ function render() {
             }
         }
 
-        gendCar.rotation.y -= rotationY/10
+        if (movementX > 0) {
+            gendCar.rotation.y -= rotationY/10
+        } else if (movementX < 0) {
+            gendCar.rotation.y -= -rotationY/10
+        }
 
         camera.position.x-=depX
         camera.position.z-=depZ
@@ -338,20 +342,10 @@ function handleKeyDown(e){
     }
 
     if (e.keyCode == 39) {
-        if (movementX > 0) {
-            rotationY = factormov
-        }
-        if (movementX < 0) {
-            rotationY = -factormov
-        }
+        rotationY = factormov
     }
     if (e.keyCode == 37) {
-        if (movementX > 0) {
-            rotationY = -factormov
-        }
-        if (movementX < 0) {
-            rotationY = factormov
-        }
+        rotationY = -factormov
     }
 
     if (e.keyCode == 32) {
