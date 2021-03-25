@@ -10,7 +10,7 @@ import models from '../data/models.js'
 let container, stats, controls
 let camera, scene, renderer
 let gendCar, gendCarInfos, landscape
-let movementX = 0, rotationY = 0, rotation = false
+let movementX = 0, rotationY = 0
 
 const gendCarSelect = document.getElementById('gendCarSelect')
 const button = document.getElementById('button1')
@@ -329,27 +329,43 @@ function render() {
 let factormov = 0.5
 function handleKeyDown(e){
     // console.log(e.keyCode)
-    if (e.keyCode == 39) {
-        rotationY = factormov
-    }
-    if (e.keyCode == 37) {
-        rotationY = -factormov
-    }
+
     if (e.keyCode == 40) {
         movementX = -factormov
     }
     if (e.keyCode == 38) {
         movementX = factormov
     }
+
+    if (e.keyCode == 39) {
+        if (movementX > 0) {
+            rotationY = factormov
+        }
+        if (movementX < 0) {
+            rotationY = -factormov
+        }
+    }
+    if (e.keyCode == 37) {
+        if (movementX > 0) {
+            rotationY = -factormov
+        }
+        if (movementX < 0) {
+            rotationY = factormov
+        }
+    }
+
     if (e.keyCode == 32) {
         // rotation = true
     }
 }
 
 function handleKeyUp(e){
-    movementX = 0
-    rotationY = 0
-    rotation = false
+    if (e.keyCode == 40 || e.keyCode == 38) {
+        movementX = 0
+    }
+    if (e.keyCode == 39 || e.keyCode == 37) {
+        rotationY = 0
+    }
 }
 
 function loadSelectedGendCar(name) {
