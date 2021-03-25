@@ -341,13 +341,15 @@ function render() {
                 }
             }
             if (landscape.values.boundsZ) {
-                const xIsOut = landscape.values.changeX && (gendCar.model.position.x > landscape.values.changeX-3) && (gendCar.model.position.x < landscape.values.changeX+3)
+                const xIsOut = landscape.values.changeX && (gendCar.model.position.x > landscape.values.changeX.min) && (gendCar.model.position.x < landscape.values.changeX.max)
                 const zIsOverMax = gendCar.model.position.z >= landscape.values.boundsZ.max
                 const zIsUnderMin = gendCar.model.position.z <= landscape.values.boundsZ.min
 
                 if (xIsOut && (zIsUnderMin || zIsOverMax)) {
                     loadSelectedGendCar()
-                    loadLandscape('Autoroute sortie')
+                    if (landscape.name === 'Départementale') {
+                        loadLandscape('Autoroute sortie')
+                    }
                     return
                 }
 

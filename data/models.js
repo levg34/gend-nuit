@@ -87,6 +87,20 @@ export default {
             options: {
                 y:6,
                 x:10
+            },
+            values: {
+                minX: 0,
+                // changeX: {
+                //     min: -380
+                // },
+                // changeY: {
+                //     min: -18
+                // },
+                maxX: -370,
+                boundsZ: {
+                    min: -6,
+                    max: 5.5
+                }
             }
         },
         {
@@ -97,8 +111,11 @@ export default {
             },
             values: {
                 minX: 0,
-                changeX: -190,
                 maxX: -330,
+                changeX: {
+                    min: -193,
+                    max: -187
+                },
                 boundsZ: {
                     min: -22,
                     max: 25
