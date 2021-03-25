@@ -9,7 +9,7 @@ import models from '../data/models.js'
 
 let container, stats, controls
 let camera, scene, renderer
-let gendCar, gendCarInfos, landscape
+let gendCar, landscape
 let movementX = 0, rotationY = 0
 
 const gendCarSelect = document.getElementById('gendCarSelect')
@@ -146,6 +146,9 @@ function loadModel(type,name) {
         if (type === 'gendCar') {
             model.options.name = 'gendCar'
         }
+        if (type === 'landscape') {
+            model.options.name = 'landscape'
+        }
         loadGeneral(model.path,model.options)
     } else {
         console.error('Modèle introuvable : '+name)
@@ -154,8 +157,8 @@ function loadModel(type,name) {
 }
 
 function removeGendCar() {
-    if (gendCar !== undefined) {
-        scene.remove(gendCar)
+    if (gendCar !== undefined && gendCar.model !== undefined) {
+        scene.remove(gendCar.model)
     }
 }
 
@@ -166,7 +169,7 @@ function loadGendCar(name) {
         camera.lookAt(0, 1, 0)
         controls.target.set(0,1,0)
     }
-    gendCarInfos = loadModel('gendCar',name)
+    gendCar = loadModel('gendCar',name)
 }
 
 function loadGeneral(path,options) {
@@ -215,17 +218,26 @@ function loadGeneral(path,options) {
         // landFolder.add(model.position,'z',-10,0,1) // 10
 
         if (options && options.name === 'gendCar') {
-            gendCar = new THREE.Object3D()
-            gendCar.add(model)
+            gendCar.model = new THREE.Object3D()
+            gendCar.model.add(model)
             if (options.rot) {
-                gendCar.rotation.y += options.rot
+                gendCar.model.rotation.y += options.rot
             }
-            scene.add(gendCar)
+            scene.add(gendCar.model)
+            console.log(gendCar)
 
             button.innerText = buttonText
             button.disabled = gendCarSelect.disabled = false
             button.style.cursor = gendCarSelect.style.cursor = 'pointer'
             document.body.style.cursor = 'move'
+        } else if (options && options.name === 'landscape') {
+            landscape.model = new THREE.Object3D()
+            landscape.model.add(model)
+            if (options.rot) {
+                landscape.model.rotation.y += options.rot
+            }
+            scene.add(landscape.model)
+            // console.log(landscape)
         } else {
             scene.add(model)
         }
@@ -287,36 +299,36 @@ function animate() {
 }
 
 function render() {
-    if (gendCar !== undefined) {
-        const gendCarRotY = gendCarInfos.options.rot ? gendCar.rotation.y - gendCarInfos.options.rot : gendCar.rotation.y
+    if (gendCar.model !== undefined) {
+        const gendCarRotY = gendCar.options.rot ? gendCar.model.rotation.y - gendCar.options.rot : gendCar.model.rotation.y
         const depX = movementX*Math.cos(gendCarRotY)
         const depZ = -movementX*Math.sin(gendCarRotY)
 
-        document.getElementById('debug').innerHTML = `gendCar.position.x : ${gendCar.position.x}<br>
-                                                      gendCar.position.y : ${gendCar.position.y}<br>
+        document.getElementById('debug').innerHTML = `gendCar.position.x : ${gendCar.model.position.x}<br>
+                                                      gendCar.position.y : ${gendCar.model.position.y}<br>
                                                       gendCar.rotation.y : ${gendCarRotY}`
 
-        gendCar.position.x-=depX
-        gendCar.position.z-=depZ
+        gendCar.model.position.x-=depX
+        gendCar.model.position.z-=depZ
 
         if (landscape.values && landscape.values.maxX) {
-            if (gendCar.position.x < landscape.values.maxX) {
-                gendCar.position.x = 0
+            if (gendCar.model.position.x < landscape.values.maxX) {
+                gendCar.model.position.x = 0
                 camera.position.x -= landscape.values.maxX 
                 controls.target.x = 0
             }
     
-            if (gendCar.position.x > 0) {
-                gendCar.position.x = landscape.values.maxX
+            if (gendCar.model.position.x > 0) {
+                gendCar.model.position.x = landscape.values.maxX
                 camera.position.x -= -landscape.values.maxX
                 controls.target.x = landscape.values.maxX
             }
         }
 
         if (movementX > 0) {
-            gendCar.rotation.y -= rotationY/10
+            gendCar.model.rotation.y -= rotationY/10
         } else if (movementX < 0) {
-            gendCar.rotation.y -= -rotationY/10
+            gendCar.model.rotation.y -= -rotationY/10
         }
 
         camera.position.x-=depX
@@ -349,7 +361,7 @@ function handleKeyDown(e){
     }
 
     if (e.keyCode == 32) {
-        // rotation = true
+        // espace
     }
 }
 
