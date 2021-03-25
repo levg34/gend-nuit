@@ -341,11 +341,21 @@ function render() {
                 }
             }
             if (landscape.values.boundsZ) {
-                if (gendCar.model.position.z >= landscape.values.boundsZ.max) {
+                const xIsOut = landscape.values.changeX && (gendCar.model.position.x > landscape.values.changeX-3) && (gendCar.model.position.x < landscape.values.changeX+3)
+                const zIsOverMax = gendCar.model.position.z >= landscape.values.boundsZ.max
+                const zIsUnderMin = gendCar.model.position.z <= landscape.values.boundsZ.min
+
+                if (xIsOut && (zIsUnderMin || zIsOverMax)) {
+                    loadSelectedGendCar()
+                    loadLandscape('Autoroute sortie')
+                    return
+                }
+
+                if (zIsOverMax) {
                     gendCar.model.position.z = landscape.values.boundsZ.max
                     updateCamera.z = false
                 }
-                if (gendCar.model.position.z <= landscape.values.boundsZ.min) {
+                if (zIsUnderMin) {
                     gendCar.model.position.z = landscape.values.boundsZ.min
                     updateCamera.z = false
                 }
@@ -408,6 +418,9 @@ function loadSelectedGendCar(name) {
 }
 
 function loadLandscape(name) {
+    if (landscape !== undefined && landscape.model !== undefined) {
+        scene.remove(landscape.model)
+    }
     landscape = loadModel('landscape',name)
 }
 
