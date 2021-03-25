@@ -98,7 +98,11 @@ export default {
             values: {
                 minX: 0,
                 changeX: -190,
-                maxX: -330
+                maxX: -330,
+                boundsZ: {
+                    min: -22,
+                    max: 25
+                }
             }
         },
         {

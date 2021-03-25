@@ -224,7 +224,7 @@ function loadGeneral(path,options) {
                 gendCar.model.rotation.y += options.rot
             }
             scene.add(gendCar.model)
-            console.log(gendCar)
+            // console.log(gendCar)
 
             button.innerText = buttonText
             button.disabled = gendCarSelect.disabled = false
@@ -304,38 +304,63 @@ function render() {
         const depX = movementX*Math.cos(gendCarRotY)
         const depZ = -movementX*Math.sin(gendCarRotY)
 
-        document.getElementById('debug').innerHTML = `gendCar.position.x : ${gendCar.model.position.x}<br>
-                                                      gendCar.position.y : ${gendCar.model.position.y}<br>
-                                                      gendCar.rotation.y : ${gendCarRotY}`
+        document.getElementById('debug').innerHTML = `gendCar.model.position.x : ${gendCar.model.position.x}<br>
+                                                      gendCar.model.position.y : ${gendCar.model.position.y}<br>
+                                                      gendCar.model.position.z : ${gendCar.model.position.z}<br>
+                                                      gendCar.model.rotation.y : ${gendCarRotY}`
+
+        let updateCamera = {
+            x: true,
+            y: true,
+            z: true
+        }
 
         gendCar.model.position.x-=depX
         gendCar.model.position.z-=depZ
 
-        if (landscape.values && landscape.values.maxX) {
-            if (gendCar.model.position.x < landscape.values.maxX) {
-                gendCar.model.position.x = 0
-                camera.position.x -= landscape.values.maxX 
-                controls.target.x = 0
-            }
-    
-            if (gendCar.model.position.x > 0) {
-                gendCar.model.position.x = landscape.values.maxX
-                camera.position.x -= -landscape.values.maxX
-                controls.target.x = landscape.values.maxX
-            }
-        }
-
         if (movementX > 0) {
-            gendCar.model.rotation.y -= rotationY/10
+            gendCar.model.rotation.y -= rotationY
         } else if (movementX < 0) {
-            gendCar.model.rotation.y -= -rotationY/10
+            gendCar.model.rotation.y -= -rotationY
         }
 
-        camera.position.x-=depX
-        camera.position.z-=depZ
+        if (landscape.values) {
+            if (landscape.values.maxX) {
+                if (gendCar.model.position.x < landscape.values.maxX) {
+                    gendCar.model.position.x = 0
+                    camera.position.x -= landscape.values.maxX 
+                    controls.target.x = 0
+                    updateCamera.x = false
+                }
+        
+                if (gendCar.model.position.x > 0) {
+                    gendCar.model.position.x = landscape.values.maxX
+                    camera.position.x -= -landscape.values.maxX
+                    controls.target.x = landscape.values.maxX
+                    updateCamera.x = false
+                }
+            }
+            if (landscape.values.boundsZ) {
+                if (gendCar.model.position.z >= landscape.values.boundsZ.max) {
+                    gendCar.model.position.z = landscape.values.boundsZ.max
+                    updateCamera.z = false
+                }
+                if (gendCar.model.position.z <= landscape.values.boundsZ.min) {
+                    gendCar.model.position.z = landscape.values.boundsZ.min
+                    updateCamera.z = false
+                }
+            }
+        }
 
-        controls.target.x-=depX
-        controls.target.z-=depZ
+        if (updateCamera.x) {
+            camera.position.x-=depX
+            controls.target.x-=depX
+        }
+        if (updateCamera.z) {
+            camera.position.z-=depZ
+            controls.target.z-=depZ
+        }
+        
         controls.update()
     }
 
@@ -343,6 +368,7 @@ function render() {
 }
 
 let factormov = 0.5
+let factorrot = 0.05
 function handleKeyDown(e){
     // console.log(e.keyCode)
 
@@ -354,10 +380,10 @@ function handleKeyDown(e){
     }
 
     if (e.keyCode == 39) {
-        rotationY = factormov
+        rotationY = factorrot
     }
     if (e.keyCode == 37) {
-        rotationY = -factormov
+        rotationY = -factorrot
     }
 
     if (e.keyCode == 32) {
