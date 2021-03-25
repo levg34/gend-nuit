@@ -325,18 +325,18 @@ function render() {
         }
 
         if (landscape.values) {
-            if (landscape.values.maxX) {
-                if (gendCar.model.position.x < landscape.values.maxX) {
+            if (landscape.values.boundsX.max) {
+                if (gendCar.model.position.x < landscape.values.boundsX.max) {
                     gendCar.model.position.x = 0
-                    camera.position.x -= landscape.values.maxX 
+                    camera.position.x -= landscape.values.boundsX.max 
                     controls.target.x = 0
                     updateCamera.x = false
                 }
         
                 if (gendCar.model.position.x > 0) {
-                    gendCar.model.position.x = landscape.values.maxX
-                    camera.position.x -= -landscape.values.maxX
-                    controls.target.x = landscape.values.maxX
+                    gendCar.model.position.x = landscape.values.boundsX.max
+                    camera.position.x -= -landscape.values.boundsX.max
+                    controls.target.x = landscape.values.boundsX.max
                     updateCamera.x = false
                 }
             }
