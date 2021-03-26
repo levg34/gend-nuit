@@ -322,11 +322,12 @@ function render() {
         }
 
         if (gendCar.isLoading) {
-            updateCamera = {
-                x:false,
-                y:false,
-                z:false
-            }
+            return
+            // updateCamera = {
+            //     x:false,
+            //     y:false,
+            //     z:false
+            // }
         }
 
         gendCar.model.position.x-=depX
@@ -362,7 +363,6 @@ function render() {
                 const zIsUnderMin = landscape.values.boundsZ.min !== undefined && gendCar.model.position.z <= landscape.values.boundsZ.min
 
                 if (xIsOut && (zIsUnderMin || zIsOverMax) && !landscape.isLoading) {
-                    console.log(landscape)
                     loadSelectedGendCar()
                     if (landscape.name === 'Départementale') {
                         loadLandscape('Autoroute sortie')
