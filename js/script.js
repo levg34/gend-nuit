@@ -356,13 +356,21 @@ function render() {
                 }
             }
             if (landscape.values.boundsZ) {
-                const xIsOut = landscape.values.changeX  
-                               && (landscape.values.changeX.min === undefined || gendCar.model.position.x > landscape.values.changeX.min) 
-                               && (landscape.values.changeX.max === undefined || gendCar.model.position.x < landscape.values.changeX.max)
-                const zIsOverMax = landscape.values.boundsZ.max !== undefined && gendCar.model.position.z >= landscape.values.boundsZ.max
-                const zIsUnderMin = landscape.values.boundsZ.min !== undefined && gendCar.model.position.z <= landscape.values.boundsZ.min
+                const boundsZ = landscape.values.boundsZ
+                const changeX = landscape.values.changeX
+                const changeZ = landscape.values.changeZ
+                
+                const xIsOut = changeX  
+                               && (changeX.min === undefined || gendCar.model.position.x > changeX.min) 
+                               && (changeX.max === undefined || gendCar.model.position.x < changeX.max)
+                const zIsOut = changeZ
+                               && (changeZ.min === undefined || gendCar.model.position.z > changeZ.min) 
+                               && (changeZ.max === undefined || gendCar.model.position.z < changeZ.max)
+                
+                const zIsOverMax = boundsZ.max !== undefined && gendCar.model.position.z >= boundsZ.max
+                const zIsUnderMin = boundsZ.min !== undefined && gendCar.model.position.z <= boundsZ.min
 
-                if (xIsOut && (zIsUnderMin || zIsOverMax) && !landscape.isLoading) {
+                if (xIsOut && zIsOut && !landscape.isLoading) {
                     loadSelectedGendCar()
                     if (landscape.name === 'Départementale') {
                         loadLandscape('Autoroute sortie')
@@ -372,12 +380,12 @@ function render() {
                     return
                 }
 
-                if (zIsOverMax) {
-                    gendCar.model.position.z = landscape.values.boundsZ.max
+                if (zIsOverMax && (!xIsOut || (xIsOut && Math.min(changeZ.min,changeZ.max) < boundsZ.max))) {
+                    gendCar.model.position.z = boundsZ.max
                     updateCamera.z = false
                 }
-                if (zIsUnderMin) {
-                    gendCar.model.position.z = landscape.values.boundsZ.min
+                if (zIsUnderMin && (!xIsOut || (xIsOut && Math.max(changeZ.min,changeZ.max) > boundsZ.min))) {
+                    gendCar.model.position.z = boundsZ.min
                     updateCamera.z = false
                 }
             }

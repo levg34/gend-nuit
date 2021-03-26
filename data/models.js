@@ -91,17 +91,20 @@ export default {
             values: {
                 boundsX: {
                     min: 0,
-                    max: -370,
+                    max: -380,
                 },
                 changeX: {
-                    // min: -380
                     min: -380,
-                    max: -315
+                    max: -270
+                },
+                changeZ: {
+                    min: -25,
+                    max: -16
                 },
                 boundsZ: {
-                    min: -15,
-                    // max: 5.5
-                    max: 21
+                    min: -4,
+                    maxS1: 5.5,
+                    max: 18
                 }
             }
         },
@@ -120,9 +123,17 @@ export default {
                     min: -193,
                     max: -187
                 },
+                // changeZ: {
+                //     min: 25,
+                //     max: Infinity
+                // },
+                changeZ: {
+                    min: -Infinity,
+                    max: -22
+                },
                 boundsZ: {
-                    min: -22,
-                    max: 25
+                    min: -5,
+                    max: 8
                 }
             }
         },
