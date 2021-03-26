@@ -31,8 +31,8 @@ function init() {
 
     // collada
 
-    // loadLandscape('Départementale')
-    loadLandscape('Autoroute sortie')
+    loadLandscape('Départementale')
+    // loadLandscape('Autoroute sortie')
     // loadLandscape('Autoroute A9 - Le Boulou')
     // loadLandscape('Travaux')
     // loadLandscape('Autoroute')
@@ -299,7 +299,7 @@ function animate() {
 }
 
 function render() {
-    if (gendCar.model !== undefined) {
+    if (gendCar.model !== undefined && landscape.model !== undefined) {
         const gendCarRotY = gendCar.options.rot ? gendCar.model.rotation.y - gendCar.options.rot : gendCar.model.rotation.y
         const depX = movementX*Math.cos(gendCarRotY)
         const depZ = -movementX*Math.sin(gendCarRotY)
