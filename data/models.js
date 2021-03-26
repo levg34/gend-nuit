@@ -93,12 +93,14 @@ export default {
                     min: 0,
                     max: -370,
                 },
-                // changeX: {
-                //     min: -380
-                // },
-                // changeZ: {
-                //     min: -18
-                // },
+                changeX: {
+                    // min: -380
+                    min: -380,
+                    max: -315
+                },
+                changeZ: {
+                    min: -18
+                },
                 boundsZ: {
                     min: -6,
                     // max: 5.5

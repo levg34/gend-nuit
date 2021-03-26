@@ -170,6 +170,7 @@ function loadGendCar(name) {
         controls.target.set(0,1,0)
     }
     gendCar = loadModel('gendCar',name)
+    gendCar.isLoading = true
 }
 
 function loadGeneral(path,options) {
@@ -224,6 +225,7 @@ function loadGeneral(path,options) {
                 gendCar.model.rotation.y += options.rot
             }
             scene.add(gendCar.model)
+            gendCar.isLoading = false
             // console.log(gendCar)
 
             button.innerText = buttonText
@@ -237,6 +239,7 @@ function loadGeneral(path,options) {
                 landscape.model.rotation.y += options.rot
             }
             scene.add(landscape.model)
+            landscape.isLoading = false
             // console.log(landscape)
         } else {
             scene.add(model)
@@ -315,6 +318,14 @@ function render() {
             z: true
         }
 
+        if (gendCar.isLoading) {
+            updateCamera = {
+                x:false,
+                y:false,
+                z:false
+            }
+        }
+
         gendCar.model.position.x-=depX
         gendCar.model.position.z-=depZ
 
@@ -341,14 +352,19 @@ function render() {
                 }
             }
             if (landscape.values.boundsZ) {
-                const xIsOut = landscape.values.changeX && (gendCar.model.position.x > landscape.values.changeX.min) && (gendCar.model.position.x < landscape.values.changeX.max)
+                const xIsOut = landscape.values.changeX  
+                               && (landscape.values.changeX.min === undefined || gendCar.model.position.x > landscape.values.changeX.min) 
+                               && (landscape.values.changeX.max === undefined || gendCar.model.position.x < landscape.values.changeX.max)
                 const zIsOverMax = landscape.values.boundsZ.max !== undefined && gendCar.model.position.z >= landscape.values.boundsZ.max
                 const zIsUnderMin = landscape.values.boundsZ.min !== undefined && gendCar.model.position.z <= landscape.values.boundsZ.min
 
-                if (xIsOut && (zIsUnderMin || zIsOverMax)) {
+                if (xIsOut && (zIsUnderMin || zIsOverMax) && !landscape.isLoading) {
+                    console.log(landscape)
                     loadSelectedGendCar()
                     if (landscape.name === 'Départementale') {
                         loadLandscape('Autoroute sortie')
+                    } else if (landscape.name === 'Autoroute sortie') {
+                        loadLandscape('Départementale')
                     }
                     return
                 }
@@ -424,6 +440,7 @@ function loadLandscape(name) {
         scene.remove(landscape.model)
     }
     landscape = loadModel('landscape',name)
+    landscape.isLoading = true
 }
 
 document.addEventListener('keyup', handleKeyUp)
