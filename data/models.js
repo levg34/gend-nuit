@@ -101,7 +101,8 @@ export default {
                 // },
                 boundsZ: {
                     min: -6,
-                    max: 5.5
+                    // max: 5.5
+                    max: 21
                 }
             }
         },

@@ -31,8 +31,8 @@ function init() {
 
     // collada
 
-    loadLandscape('Départementale')
-    // loadLandscape('Autoroute sortie')
+    // loadLandscape('Départementale')
+    loadLandscape('Autoroute sortie')
     // loadLandscape('Autoroute A9 - Le Boulou')
     // loadLandscape('Travaux')
     // loadLandscape('Autoroute')
@@ -325,7 +325,7 @@ function render() {
         }
 
         if (landscape.values) {
-            if (landscape.values.boundsX.max) {
+            if (landscape.values.boundsX.max !== undefined) {
                 if (gendCar.model.position.x < landscape.values.boundsX.max) {
                     gendCar.model.position.x = 0
                     camera.position.x -= landscape.values.boundsX.max 
@@ -342,8 +342,8 @@ function render() {
             }
             if (landscape.values.boundsZ) {
                 const xIsOut = landscape.values.changeX && (gendCar.model.position.x > landscape.values.changeX.min) && (gendCar.model.position.x < landscape.values.changeX.max)
-                const zIsOverMax = gendCar.model.position.z >= landscape.values.boundsZ.max
-                const zIsUnderMin = gendCar.model.position.z <= landscape.values.boundsZ.min
+                const zIsOverMax = landscape.values.boundsZ.max !== undefined && gendCar.model.position.z >= landscape.values.boundsZ.max
+                const zIsUnderMin = landscape.values.boundsZ.min !== undefined && gendCar.model.position.z <= landscape.values.boundsZ.min
 
                 if (xIsOut && (zIsUnderMin || zIsOverMax)) {
                     loadSelectedGendCar()
