@@ -98,11 +98,8 @@ export default {
                     min: -380,
                     max: -315
                 },
-                changeZ: {
-                    min: -18
-                },
                 boundsZ: {
-                    min: -6,
+                    min: -15,
                     // max: 5.5
                     max: 21
                 }
