@@ -24,7 +24,7 @@ function init() {
     document.body.style.cursor = 'wait'
 
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000)
-    camera.position.set(8, 10, 8)
+    camera.position.set(9, 5, 4.5)
     camera.lookAt(0, 1, 0)
 
     scene = new THREE.Scene()
@@ -165,7 +165,7 @@ function removeGendCar() {
 function loadGendCar(name) {
     removeGendCar()
     if (controls !== undefined && camera !== undefined) {
-        camera.position.set(8, 10, 8)
+        camera.position.set(9, 5, 4.5)
         camera.lookAt(0, 1, 0)
         controls.target.set(0,1,0)
     }
@@ -310,7 +310,10 @@ function render() {
         document.getElementById('debug').innerHTML = `gendCar.model.position.x : ${gendCar.model.position.x}<br>
                                                       gendCar.model.position.y : ${gendCar.model.position.y}<br>
                                                       gendCar.model.position.z : ${gendCar.model.position.z}<br>
-                                                      gendCar.model.rotation.y : ${gendCarRotY}`
+                                                      gendCar.model.rotation.y : ${gendCarRotY}<br>
+                                                      camera.position.x : ${camera.position.x}<br>
+                                                      camera.position.y : ${camera.position.y}<br>
+                                                      camera.position.z : ${camera.position.z}<br>`
 
         let updateCamera = {
             x: true,
