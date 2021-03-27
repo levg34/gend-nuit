@@ -31,13 +31,13 @@ function init() {
 
     // collada
 
-    loadLandscape('Départementale')
+    loadLandscape()
     // loadLandscape('Autoroute sortie')
     // loadLandscape('Autoroute A9 - Le Boulou')
     // loadLandscape('Travaux')
     // loadLandscape('Autoroute')
     // loadLandscape('Autoroute avec pont')
-    loadSelectedGendCar('Kangoo')
+    loadSelectedGendCar()
 
     // const loader = new KMZLoader()
     // loader.load('./model/KangooGendarmerie.kmz', function (kmz) {
@@ -138,7 +138,7 @@ function init() {
 }
 
 function loadModel(type,name) {
-    const model = models[type].find(model => model.name === name)
+    const model = name ? models[type].find(model => model.name === name) : models[type][0]
     if (model !== undefined) {
         if (model.options === undefined) {
             model.options = {}
@@ -270,22 +270,6 @@ function noWireframe(object) {
         }
     })
     lines.forEach((ls, k) => ls.forEach(l => k.remove(l)))
-}
-
-function createCube(x,y,z,color) {
-    const geometry = new THREE.BoxGeometry(1, 1, 1)
-
-    const material = new THREE.MeshPhongMaterial({color})  // greenish blue
-
-    const cube = new THREE.Mesh(geometry, material)
-    cube.translateZ(x)
-    cube.translateY(z)
-    cube.translateX(y)
-    cube.translateY(0.5)
-
-    cube.castShadow = true
-
-    return cube
 }
 
 function onWindowResize() {
@@ -436,11 +420,11 @@ function handleKeyUp(e){
     }
 }
 
-function loadSelectedGendCar(name) {
+function loadSelectedGendCar() {
     button.innerText = 'Patientez...'
     button.disabled = gendCarSelect.disabled = true
     button.style.cursor = document.body.style.cursor = 'wait'
-    loadGendCar(name ? name : gendCarSelect.value)
+    loadGendCar(gendCarSelect.value)
 }
 
 function loadLandscape(name) {

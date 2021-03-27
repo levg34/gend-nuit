@@ -60,25 +60,37 @@ export default {
     ],
     landscape: [
         {
-            name: 'Travaux',
-            path: './model/travaux/model.dae',
-            options: {}
-        },
-        {
-            name: 'Autoroute',
-            path: './model/autoroute/model.dae',
+            name: 'Départementale',
+            path: './model/departementale/model.dae',
             options: {
-                x: -350,
-                y: 266
-            }
-        },
-        {
-            name: 'Autoroute avec pont',
-            path: './model/autoroute-pont/model.dae',
-            options: {
-                x: -40,
-                z: 19,
-                y: -10
+                y:2,
+            },
+            values: {
+                bounds:{
+                    x: {
+                        min: 0,
+                        max: -330
+                    },
+                    z: {
+                        min: -5,
+                        max: 8
+                    }
+                },
+                change: {
+                    x: {
+                        min: -193,
+                        max: -187
+                    },
+                // changeZ: {
+                //     min: 25,
+                //     max: Infinity
+                // },
+                    z: {
+                        min: -Infinity,
+                        max: -22
+                    },
+                    dest: 'Autoroute sortie'
+                }
             }
         },
         {
@@ -114,37 +126,17 @@ export default {
             }
         },
         {
-            name: 'Départementale',
-            path: './model/departementale/model.dae',
+            name: 'Travaux',
+            path: './model/travaux/model.dae',
+            options: {}
+        },
+        {
+            name: 'Autoroute avec pont',
+            path: './model/autoroute-pont/model.dae',
             options: {
-                y:2,
-            },
-            values: {
-                bounds:{
-                    x: {
-                        min: 0,
-                        max: -330
-                    },
-                    z: {
-                        min: -5,
-                        max: 8
-                    }
-                },
-                change: {
-                    x: {
-                        min: -193,
-                        max: -187
-                    },
-                // changeZ: {
-                //     min: 25,
-                //     max: Infinity
-                // },
-                    z: {
-                        min: -Infinity,
-                        max: -22
-                    },
-                    dest: 'Autoroute sortie'
-                }
+                x: -40,
+                z: 19,
+                y: -10
             }
         },
         {
@@ -154,5 +146,13 @@ export default {
                 // y:2,
             }
         },
+        {
+            name: 'Autoroute',
+            path: './model/autoroute/model.dae',
+            options: {
+                x: -350,
+                y: 266
+            }
+        }
     ]
 }
