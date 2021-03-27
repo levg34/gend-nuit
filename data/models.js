@@ -173,7 +173,18 @@ export default {
             name: 'Autoroute A9 - Le Boulou',
             path: './model/autoroute-boulou.kmz',
             options: {
-                // y:2,
+                x: 18,
+                y: 161,
+                z: -0.1,
+                rot: Math.PI/2
+            },
+            values: {
+                bounds:{
+                    x: {
+                        min: 0,
+                        max: -370,
+                    }
+                },
             }
         },
         {

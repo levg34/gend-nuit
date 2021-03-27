@@ -19,6 +19,10 @@ const buttonText = button.innerText
 init()
 animate()
 
+if (localStorage.getItem('debug')) {
+    document.getElementById('debug').hidden = false
+}
+
 function init() {
     container = document.getElementById('container')
     document.body.style.cursor = 'wait'
@@ -39,22 +43,6 @@ function init() {
     // loadLandscape('Autoroute avec pont')
     loadSelectedGendCar()
 
-    // const loader = new KMZLoader()
-    // loader.load('./model/KangooGendarmerie.kmz', function (kmz) {
-    //     kmz.scene.position.z = -2
-    //     kmz.scene.position.x = -18
-    //     scene.add(kmz.scene)
-    //     // render()
-    // })
-
-    // fbx
-
-    // const loader = new FBXLoader()
-    // loader.load( 'model/fbx/Gendarmerie_Dacia_Duster.FBX', function (object) {
-    //     object.scale
-    //     scene.add(object)
-    // })
-
     //
 
     const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4)
@@ -64,17 +52,6 @@ function init() {
     directionalLight.position.set(1, 1, 0).normalize()
     // directionalLight.castShadow = true
     scene.add(directionalLight)
-
-    const spotLight = new THREE.SpotLight(0xffffff)
-    spotLight.position.set(-2, 1, 0)
-    spotLight.target.position.set(-100, 1, 0)
-    spotLight.angle = Math.PI/6
-    spotLight.castShadow = true
-    // scene.add(spotLight)
-    // scene.add(spotLight.target)
-
-    // const helper = new THREE.SpotLightHelper(spotLight);
-    // scene.add(helper);
 
     //
 
@@ -108,26 +85,6 @@ function init() {
     // GUI
 
     // const gui = new GUI()
-    // const lightFolder = gui.addFolder('Lights')
-    // lightFolder.add(spotLight.position,'x',-5,5,0.5).onChange(() => {
-    //     spotLight.target.updateMatrixWorld
-    //     helper.update
-    // })
-    // lightFolder.add(spotLight.position,'y',-5,5,0.5).onChange(() => {
-    //     spotLight.target.updateMatrixWorld
-    //     helper.update
-    // })
-    // lightFolder.add(spotLight.position,'z',-5,5,0.5).onChange(() => {
-    //     spotLight.target.updateMatrixWorld
-    //     helper.update
-    // })
-    // lightFolder.add(spotLight.target.position,'x',-50,50,0.5)
-    // lightFolder.add(spotLight.target.position,'y',-50,50,0.5)
-    // lightFolder.add(spotLight.target.position,'z',-50,50,0.5)
-    // const landFolder = gui.addFolder('Autoroute')
-    // landFolder.add(landscape.position,'x',-1000,1000,10)
-    // landFolder.add(landscape.position,'y',-1000,1000,10)
-    // landFolder.add(landscape.position,'z',-1000,1000,10)
     // const orbitFolder = gui.addFolder('Orbit')
     // orbitFolder.add(controls,'minDistance',0,100,5)
     // orbitFolder.add(controls,'maxDistance',0,100,10)
@@ -307,11 +264,6 @@ function render() {
 
         if (gendCar.isLoading) {
             return
-            // updateCamera = {
-            //     x:false,
-            //     y:false,
-            //     z:false
-            // }
         }
 
         gendCar.model.position.x-=depX
@@ -349,33 +301,35 @@ function render() {
                 let ignoreZmin = false
 
                 if (hasChange) {
-                    const change = landscape.values.change[0]
-                    const changeX = change.x
-                    const changeZ = change.z
-                    const dest = change.dest
-                    
-                    const xIsOut = changeX
-                                && (changeX.min === undefined || gendCar.model.position.x > changeX.min) 
-                                && (changeX.max === undefined || gendCar.model.position.x < changeX.max)
-                    const zIsOut = changeZ
-                                && (changeZ.min === undefined || gendCar.model.position.z > changeZ.min) 
-                                && (changeZ.max === undefined || gendCar.model.position.z < changeZ.max)
-
-                    ignoreZmax = (xIsOut && Math.min(changeZ.min,changeZ.max) > boundsZ.max)
-                    ignoreZmin = (xIsOut && Math.max(changeZ.min,changeZ.max) < boundsZ.min)
-
-                    if (xIsOut && zIsOut && !landscape.isLoading) {
-                        loadSelectedGendCar()
-                        loadLandscape(dest)
-                        return
-                    }
+                    // const change = landscape.values.change[0]
+                    landscape.values.change.forEach(change => {
+                        const changeX = change.x
+                        const changeZ = change.z
+                        const dest = change.dest
+                        
+                        const xIsOut = changeX
+                                    && (changeX.min === undefined || gendCar.model.position.x > changeX.min) 
+                                    && (changeX.max === undefined || gendCar.model.position.x < changeX.max)
+                        const zIsOut = changeZ
+                                    && (changeZ.min === undefined || gendCar.model.position.z > changeZ.min) 
+                                    && (changeZ.max === undefined || gendCar.model.position.z < changeZ.max)
+    
+                        ignoreZmax = ignoreZmax || (xIsOut && Math.min(changeZ.min,changeZ.max) > boundsZ.max)
+                        ignoreZmin = ignoreZmin || (xIsOut && Math.max(changeZ.min,changeZ.max) < boundsZ.min)
+    
+                        if (xIsOut && zIsOut && !landscape.isLoading) {
+                            loadSelectedGendCar()
+                            loadLandscape(dest)
+                            return
+                        }
+                    })
                 }
 
-                if (zIsOverMax && !ignoreZmax) { // && (!xIsOut || (xIsOut && Math.min(changeZ.min,changeZ.max) < boundsZ.max))) {
+                if (zIsOverMax && !ignoreZmax) {
                     gendCar.model.position.z = boundsZ.max
                     updateCamera.z = false
                 }
-                if (zIsUnderMin && !ignoreZmin) { // && (!xIsOut || (xIsOut && Math.max(changeZ.min,changeZ.max) > boundsZ.min))) {
+                if (zIsUnderMin && !ignoreZmin) {
                     gendCar.model.position.z = boundsZ.min
                     updateCamera.z = false
                 }
