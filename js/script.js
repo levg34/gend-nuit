@@ -340,25 +340,26 @@ function render() {
         }
 
         if (landscape.values) {
-            if (landscape.values.boundsX.max !== undefined) {
-                if (gendCar.model.position.x < landscape.values.boundsX.max) {
+            if (landscape.values.bounds.x.max !== undefined) {
+                if (gendCar.model.position.x < landscape.values.bounds.x.max) {
                     gendCar.model.position.x = 0
-                    camera.position.x -= landscape.values.boundsX.max 
+                    camera.position.x -= landscape.values.bounds.x.max 
                     controls.target.x = 0
                     updateCamera.x = false
                 }
         
                 if (gendCar.model.position.x > 0) {
-                    gendCar.model.position.x = landscape.values.boundsX.max
-                    camera.position.x -= -landscape.values.boundsX.max
-                    controls.target.x = landscape.values.boundsX.max
+                    gendCar.model.position.x = landscape.values.bounds.x.max
+                    camera.position.x -= -landscape.values.bounds.x.max
+                    controls.target.x = landscape.values.bounds.x.max
                     updateCamera.x = false
                 }
             }
-            if (landscape.values.boundsZ) {
-                const boundsZ = landscape.values.boundsZ
-                const changeX = landscape.values.changeX
-                const changeZ = landscape.values.changeZ
+            if (landscape.values.bounds.z) {
+                const boundsZ = landscape.values.bounds.z
+                const changeX = landscape.values.change.x
+                const changeZ = landscape.values.change.z
+                const dest = landscape.values.change.dest
                 
                 const xIsOut = changeX  
                                && (changeX.min === undefined || gendCar.model.position.x > changeX.min) 
@@ -372,11 +373,7 @@ function render() {
 
                 if (xIsOut && zIsOut && !landscape.isLoading) {
                     loadSelectedGendCar()
-                    if (landscape.name === 'Départementale') {
-                        loadLandscape('Autoroute sortie')
-                    } else if (landscape.name === 'Autoroute sortie') {
-                        loadLandscape('Départementale')
-                    }
+                    loadLandscape(dest)
                     return
                 }
 

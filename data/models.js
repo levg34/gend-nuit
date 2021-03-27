@@ -89,22 +89,27 @@ export default {
                 x:10
             },
             values: {
-                boundsX: {
-                    min: 0,
-                    max: -380,
+                bounds:{
+                    x: {
+                        min: 0,
+                        max: -380,
+                    },
+                    z: {
+                        min: -4,
+                        maxS1: 5.5,
+                        max: 18
+                    }
                 },
-                changeX: {
-                    min: -380,
-                    max: -270
-                },
-                changeZ: {
-                    min: -25,
-                    max: -16
-                },
-                boundsZ: {
-                    min: -4,
-                    maxS1: 5.5,
-                    max: 18
+                change: {
+                    x: {
+                        min: -380,
+                        max: -270
+                    },
+                    z: {
+                        min: -25,
+                        max: -16
+                    },
+                    dest: 'Départementale'
                 }
             }
         },
@@ -115,25 +120,30 @@ export default {
                 y:2,
             },
             values: {
-                boundsX: {
-                    min: 0,
-                    max: -330
+                bounds:{
+                    x: {
+                        min: 0,
+                        max: -330
+                    },
+                    z: {
+                        min: -5,
+                        max: 8
+                    }
                 },
-                changeX: {
-                    min: -193,
-                    max: -187
-                },
+                change: {
+                    x: {
+                        min: -193,
+                        max: -187
+                    },
                 // changeZ: {
                 //     min: 25,
                 //     max: Infinity
                 // },
-                changeZ: {
-                    min: -Infinity,
-                    max: -22
-                },
-                boundsZ: {
-                    min: -5,
-                    max: 8
+                    z: {
+                        min: -Infinity,
+                        max: -22
+                    },
+                    dest: 'Autoroute sortie'
                 }
             }
         },
