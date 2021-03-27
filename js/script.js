@@ -323,7 +323,7 @@ function render() {
             gendCar.model.rotation.y -= -rotationY
         }
 
-        if (landscape.values) {
+        if (landscape.values && landscape.values.bounds) {
             if (landscape.values.bounds.x.max !== undefined) {
                 if (gendCar.model.position.x < landscape.values.bounds.x.max) {
                     gendCar.model.position.x = 0
@@ -341,31 +341,41 @@ function render() {
             }
             if (landscape.values.bounds.z) {
                 const boundsZ = landscape.values.bounds.z
-                const changeX = landscape.values.change.x
-                const changeZ = landscape.values.change.z
-                const dest = landscape.values.change.dest
-                
-                const xIsOut = changeX  
-                               && (changeX.min === undefined || gendCar.model.position.x > changeX.min) 
-                               && (changeX.max === undefined || gendCar.model.position.x < changeX.max)
-                const zIsOut = changeZ
-                               && (changeZ.min === undefined || gendCar.model.position.z > changeZ.min) 
-                               && (changeZ.max === undefined || gendCar.model.position.z < changeZ.max)
-                
                 const zIsOverMax = boundsZ.max !== undefined && gendCar.model.position.z >= boundsZ.max
                 const zIsUnderMin = boundsZ.min !== undefined && gendCar.model.position.z <= boundsZ.min
+                
+                const hasChange = landscape.values.change instanceof Array
+                let ignoreZmax = false
+                let ignoreZmin = false
 
-                if (xIsOut && zIsOut && !landscape.isLoading) {
-                    loadSelectedGendCar()
-                    loadLandscape(dest)
-                    return
+                if (hasChange) {
+                    const change = landscape.values.change[0]
+                    const changeX = change.x
+                    const changeZ = change.z
+                    const dest = change.dest
+                    
+                    const xIsOut = changeX
+                                && (changeX.min === undefined || gendCar.model.position.x > changeX.min) 
+                                && (changeX.max === undefined || gendCar.model.position.x < changeX.max)
+                    const zIsOut = changeZ
+                                && (changeZ.min === undefined || gendCar.model.position.z > changeZ.min) 
+                                && (changeZ.max === undefined || gendCar.model.position.z < changeZ.max)
+
+                    ignoreZmax = (xIsOut && Math.min(changeZ.min,changeZ.max) > boundsZ.max)
+                    ignoreZmin = (xIsOut && Math.max(changeZ.min,changeZ.max) < boundsZ.min)
+
+                    if (xIsOut && zIsOut && !landscape.isLoading) {
+                        loadSelectedGendCar()
+                        loadLandscape(dest)
+                        return
+                    }
                 }
 
-                if (zIsOverMax && (!xIsOut || (xIsOut && Math.min(changeZ.min,changeZ.max) < boundsZ.max))) {
+                if (zIsOverMax && !ignoreZmax) { // && (!xIsOut || (xIsOut && Math.min(changeZ.min,changeZ.max) < boundsZ.max))) {
                     gendCar.model.position.z = boundsZ.max
                     updateCamera.z = false
                 }
-                if (zIsUnderMin && (!xIsOut || (xIsOut && Math.max(changeZ.min,changeZ.max) > boundsZ.min))) {
+                if (zIsUnderMin && !ignoreZmin) { // && (!xIsOut || (xIsOut && Math.max(changeZ.min,changeZ.max) > boundsZ.min))) {
                     gendCar.model.position.z = boundsZ.min
                     updateCamera.z = false
                 }
