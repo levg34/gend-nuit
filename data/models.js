@@ -76,21 +76,30 @@ export default {
                         max: 8
                     }
                 },
-                change: {
-                    x: {
-                        min: -193,
-                        max: -187
+                change: [
+                    {
+                        x: {
+                            min: -193,
+                            max: -187
+                        },
+                        z: {
+                            min: -Infinity,
+                            max: -22
+                        },
+                        dest: 'Autoroute sortie'
                     },
-                // changeZ: {
-                //     min: 25,
-                //     max: Infinity
-                // },
-                    z: {
-                        min: -Infinity,
-                        max: -22
-                    },
-                    dest: 'Autoroute sortie'
-                }
+                    {
+                        x: {
+                            min: -193,
+                            max: -187
+                        },
+                        z: {
+                            min: 25,
+                            max: Infinity
+                        },
+                        dest: 'Autoroute avec pont'
+                    }
+                ]
             }
         },
         {
@@ -112,31 +121,52 @@ export default {
                         max: 18
                     }
                 },
-                change: {
-                    x: {
-                        min: -380,
-                        max: -270
-                    },
-                    z: {
-                        min: -25,
-                        max: -16
-                    },
-                    dest: 'Départementale'
-                }
+                change: [
+                    {
+                        x: {
+                            min: -380,
+                            max: -270
+                        },
+                        z: {
+                            min: -25,
+                            max: -16
+                        },
+                        dest: 'Départementale'
+                    }
+                ]
             }
         },
         {
             name: 'Travaux',
             path: './model/travaux/model.dae',
-            options: {}
+            options: {
+                x: -9,
+                y: 143,
+                z: -0.25,
+                rot: Math.PI/2
+            }
         },
         {
             name: 'Autoroute avec pont',
             path: './model/autoroute-pont/model.dae',
             options: {
-                x: -40,
+                x: -36,
                 z: 19,
-                y: -10
+                y: -10,
+                rot: Math.PI/2
+            },
+            values: {
+                bounds:{
+                    x: {
+                        min: 0,
+                        max: -377,
+                    },
+                    z: {
+                        min: -4,
+                        maxS1: 9,
+                        max: 26
+                    }
+                }
             }
         },
         {
