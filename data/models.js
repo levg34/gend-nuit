@@ -197,6 +197,18 @@ export default {
                         x: -162,
                         y: 5
                     }
+                },
+                {
+                    name: 'Girl',
+                    options: {
+                        x: -131.5,
+                        y: 6.4,
+                        z: 25,
+                        // rot: Math.PI/2,
+                    },
+                    // moveTo: {
+                    //     x: 0
+                    // }
                 }
             ]
         },

@@ -103,7 +103,6 @@ function loadModel(type,name,options) {
         if (model.options === undefined) {
             model.options = {}
         }
-        model.options = {...model.options, ...options}
         if (type === 'gendCar') {
             model.options.name = 'gendCar'
         } else if (type === 'landscape') {
@@ -111,7 +110,7 @@ function loadModel(type,name,options) {
         } else {
             model.options.name = model.name
         }
-        loadGeneral(model.path,model.options)
+        loadGeneral(model.path,{...model.options, ...options})
     } else {
         console.error('Modèle introuvable : '+name)
     }
@@ -174,11 +173,11 @@ function loadGeneral(path,options) {
         }
         makeShadow(model)
 
-        // const gui = new GUI()
-        // const landFolder = gui.addFolder('Model')
-        // landFolder.add(model.position,'x',-5,5,0.1)
-        // landFolder.add(model.position,'y',-5,5,0.5)
-        // landFolder.add(model.position,'z',-5,5,0.1)
+        const gui = new GUI()
+        const landFolder = gui.addFolder('Model')
+        landFolder.add(model.position,'x',-140,-130,0.5)
+        landFolder.add(model.position,'y',6,7,0.1)
+        landFolder.add(model.position,'z',20,30,0.5)
 
         if (options && options.scale) {
             model.scale.set(options.scale,options.scale,options.scale)
