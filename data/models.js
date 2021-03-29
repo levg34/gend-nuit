@@ -56,6 +56,14 @@ export default {
                 z: 0,
                 rot: -Math.PI/2
             }
+        },
+        {
+            name: 'Motard',
+            path: './model/motard-gend/model.dae',
+            options: {
+                y: -3.2,
+                x: -3
+            }
         }
     ],
     landscape: [
@@ -100,7 +108,21 @@ export default {
                         dest: 'Autoroute avec pont'
                     }
                 ]
-            }
+            },
+            elements: [
+                {
+                    name: 'Girl',
+                    options: {
+                        // x: -58,
+                        x: -176,
+                        z: -4,
+                        rot: Math.PI/2,
+                    },
+                    moveTo: {
+                        x: 0
+                    }
+                }
+            ]
         },
         {
             name: 'Autoroute sortie',
@@ -167,7 +189,16 @@ export default {
                         max: 26
                     }
                 }
-            }
+            },
+            elements: [
+                {
+                    name: '2 motards fixes',
+                    options: {
+                        x: -162,
+                        y: 5
+                    }
+                }
+            ]
         },
         {
             name: 'Autoroute A9 - Le Boulou',
@@ -194,6 +225,26 @@ export default {
                 x: -350,
                 y: 266
             }
+        },
+        {
+            name: 'Pont A11',
+            path: './model/pont-a11/model.dae',
+            options: {}
         }
+    ],
+    elements: [   
+        {
+            name: '2 motards fixes',
+            path: './model/motards-gend-fixes/model.dae',
+            options: {}
+        },
+        {
+            name: 'Girl',
+            path: './model/girl.fbx',
+            options:{
+                scale: 0.0014,
+                animation: true
+            }
+        },
     ]
 }

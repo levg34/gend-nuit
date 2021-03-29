@@ -7,10 +7,12 @@ import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/
 import { KMZLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/KMZLoader.js'
 import models from '../data/models.js'
 
-let container, stats, controls
+let container, stats, controls, mixer
 let camera, scene, renderer
 let gendCar, landscape
 let movementX = 0, rotationY = 0
+
+const clock = new THREE.Clock()
 
 const gendCarSelect = document.getElementById('gendCarSelect')
 const button = document.getElementById('button1')
@@ -41,6 +43,7 @@ function init() {
     // loadLandscape('Travaux')
     // loadLandscape('Autoroute')
     // loadLandscape('Autoroute avec pont')
+    // loadModel('elements','2 motards fixes')
     loadSelectedGendCar()
 
     //
@@ -94,17 +97,19 @@ function init() {
     window.addEventListener('resize', onWindowResize)
 }
 
-function loadModel(type,name) {
+function loadModel(type,name,options) {
     const model = name ? models[type].find(model => model.name === name) : models[type][0]
     if (model !== undefined) {
         if (model.options === undefined) {
             model.options = {}
         }
+        model.options = {...model.options, ...options}
         if (type === 'gendCar') {
             model.options.name = 'gendCar'
-        }
-        if (type === 'landscape') {
+        } else if (type === 'landscape') {
             model.options.name = 'landscape'
+        } else {
+            model.options.name = model.name
         }
         loadGeneral(model.path,model.options)
     } else {
@@ -138,7 +143,7 @@ function loadGeneral(path,options) {
         loader = new ColladaLoader()
     } else if (ext === 'kmz') {
         loader = new KMZLoader()
-    } else if (ext.toLowerString() === 'fbx') {
+    } else if (ext === 'fbx') {
         loader = new FBXLoader()
     } else {
         console.error('Type non reconnu')
@@ -146,7 +151,7 @@ function loadGeneral(path,options) {
     }
 
     loader.load(path, function (collada) {
-        const model = collada.scene
+        const model = collada.scene ? collada.scene : collada
 
         if (options) {
             if (options.name) {
@@ -171,9 +176,19 @@ function loadGeneral(path,options) {
 
         // const gui = new GUI()
         // const landFolder = gui.addFolder('Model')
-        // landFolder.add(model.position,'x',-0,10,1) // -40
-        // landFolder.add(model.position,'y',-100,100,10) // 19
-        // landFolder.add(model.position,'z',-10,0,1) // 10
+        // landFolder.add(model.position,'x',-5,5,0.1)
+        // landFolder.add(model.position,'y',-5,5,0.5)
+        // landFolder.add(model.position,'z',-5,5,0.1)
+
+        if (options && options.scale) {
+            model.scale.set(options.scale,options.scale,options.scale)
+        }
+
+        if (options && options.animation) {
+            mixer = new THREE.AnimationMixer(model)
+            const action = mixer.clipAction(model.animations[0])
+            action.play()
+        }
 
         if (options && options.name === 'gendCar') {
             gendCar.model = new THREE.Object3D()
@@ -199,6 +214,10 @@ function loadGeneral(path,options) {
             landscape.isLoading = false
             // console.log(landscape)
         } else {
+            if (options && options.rot) {
+                model.rotation.y += options.rot
+            }
+            // console.log(model)
             scene.add(model)
         }
     })
@@ -348,6 +367,10 @@ function render() {
         controls.update()
     }
 
+    const delta = clock.getDelta()
+
+	if (mixer) mixer.update( delta )
+
     renderer.render(scene, camera)
 }
 
@@ -394,9 +417,22 @@ function loadSelectedGendCar() {
 function loadLandscape(name) {
     if (landscape !== undefined && landscape.model !== undefined) {
         scene.remove(landscape.model)
+        if (landscape.elements instanceof Array) {
+            landscape.elements.forEach(element => {
+                const elementModel = scene.getObjectByName(element.name)
+                scene.remove(elementModel)
+            })
+        }
     }
     landscape = loadModel('landscape',name)
+    if (landscape.elements instanceof Array) {
+        landscape.elements.forEach(loadElement)
+    }
     landscape.isLoading = true
+}
+
+function loadElement(element) {
+    const _element = loadModel('elements',element.name,element.options)
 }
 
 document.addEventListener('keyup', handleKeyUp)
