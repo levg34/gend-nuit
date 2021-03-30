@@ -204,11 +204,8 @@ export default {
                         x: -131.5,
                         y: 6.4,
                         z: 25,
-                        // rot: Math.PI/2,
-                    },
-                    // moveTo: {
-                    //     x: 0
-                    // }
+                        rot: Math.PI
+                    }
                 }
             ]
         },
@@ -255,7 +252,8 @@ export default {
             path: './model/girl.fbx',
             options:{
                 scale: 0.0014,
-                animation: true
+                animation: true,
+                moveForward: true
             }
         },
     ]
