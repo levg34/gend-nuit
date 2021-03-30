@@ -262,12 +262,12 @@ function animate() {
 
 function render() {
     const delta = clock.getDelta()
-    const factormov = 60*delta
+    const factorfps = 60*delta
 
     if (gendCar.model !== undefined && landscape.model !== undefined) {
         const gendCarRotY = gendCar.options.rot ? gendCar.model.rotation.y - gendCar.options.rot : gendCar.model.rotation.y
-        const depX = movementX*Math.cos(gendCarRotY)*factormov
-        const depZ = -movementX*Math.sin(gendCarRotY)*factormov
+        const depX = movementX*Math.cos(gendCarRotY)*factorfps
+        const depZ = -movementX*Math.sin(gendCarRotY)*factorfps
 
         document.getElementById('debug').innerHTML = `gendCar.model.position.x : ${gendCar.model.position.x}<br>
                                                       gendCar.model.position.y : ${gendCar.model.position.y}<br>
@@ -378,6 +378,7 @@ function render() {
 
 let factormov = 0.5
 let factorrot = 0.05
+movementX = factormov/4
 function handleKeyDown(e){
     // console.log(e.keyCode)
 
