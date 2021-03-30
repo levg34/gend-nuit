@@ -173,11 +173,11 @@ function loadGeneral(path,options) {
         }
         makeShadow(model)
 
-        const gui = new GUI()
-        const landFolder = gui.addFolder('Model')
-        landFolder.add(model.position,'x',-140,-130,0.5)
-        landFolder.add(model.position,'y',6,7,0.1)
-        landFolder.add(model.position,'z',20,30,0.5)
+        // const gui = new GUI()
+        // const landFolder = gui.addFolder('Model')
+        // landFolder.add(model.position,'x',-140,-130,0.5)
+        // landFolder.add(model.position,'y',6,7,0.1)
+        // landFolder.add(model.position,'z',20,30,0.5)
 
         if (options && options.scale) {
             model.scale.set(options.scale,options.scale,options.scale)
@@ -261,10 +261,13 @@ function animate() {
 }
 
 function render() {
+    const delta = clock.getDelta()
+    const factormov = 60*delta
+
     if (gendCar.model !== undefined && landscape.model !== undefined) {
         const gendCarRotY = gendCar.options.rot ? gendCar.model.rotation.y - gendCar.options.rot : gendCar.model.rotation.y
-        const depX = movementX*Math.cos(gendCarRotY)
-        const depZ = -movementX*Math.sin(gendCarRotY)
+        const depX = movementX*Math.cos(gendCarRotY)*factormov
+        const depZ = -movementX*Math.sin(gendCarRotY)*factormov
 
         document.getElementById('debug').innerHTML = `gendCar.model.position.x : ${gendCar.model.position.x}<br>
                                                       gendCar.model.position.y : ${gendCar.model.position.y}<br>
@@ -366,9 +369,9 @@ function render() {
         controls.update()
     }
 
-    const delta = clock.getDelta()
-
-	if (mixer) mixer.update( delta )
+    if (mixer) {
+        mixer.update(delta)
+    }
 
     renderer.render(scene, camera)
 }
