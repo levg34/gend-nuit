@@ -37,12 +37,12 @@ function init() {
 
     // collada
 
-    // loadLandscape()
+    loadLandscape()
     // loadLandscape('Autoroute sortie')
     // loadLandscape('Autoroute A9 - Le Boulou')
     // loadLandscape('Travaux')
     // loadLandscape('Autoroute')
-    loadLandscape('Autoroute avec pont')
+    // loadLandscape('Autoroute avec pont')
     // loadModel('elements','2 motards fixes')
     loadSelectedGendCar()
 
