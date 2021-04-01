@@ -396,10 +396,22 @@ function render() {
 
         if (landscape.elements instanceof Array) {
             landscape.elements.forEach(element => {
-                if (element.move) {
-                    if (element.move.forward) {
-                        // faire avancer de element.move.forward
-                    }
+                let speed = 0
+                const mergedOptions = {
+                    ...models.elements.find(el => el.name === element.name).options,
+                    ...element.options
+                }
+
+                if (mergedOptions !== undefined && mergedOptions.move) {
+                    speed = mergedOptions.move.forward
+                }
+
+                if (speed !== 0 && element.model !== undefined) {
+                        const elementRotY = mergedOptions.rot ? element.model.children[0].rotation.y - mergedOptions.rot : element.model.children[0].rotation.y
+                        const elementDepX = Math.cos(elementRotY)*speed*factorfps
+                        const elementDepZ = -Math.sin(elementRotY)*speed*factorfps
+                        element.model.position.x-=elementDepX
+                        element.model.position.z-=elementDepZ
                 }
             })
         }

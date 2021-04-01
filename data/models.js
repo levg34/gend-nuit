@@ -134,7 +134,7 @@ export default {
                     options: {
                         tx: -176,
                         tz: -4,
-                        rot2: Math.PI,
+                        rot2: Math.PI
                     }
                 }
             ]
@@ -178,7 +178,10 @@ export default {
                     options: {
                         rot2: Math.PI,
                         tx: -371,
-                        tz: 13.5
+                        tz: 13.5,
+                        move: {
+                            forward: 1/4
+                        }
                     }
                 }
             ]
@@ -240,7 +243,7 @@ export default {
                         tx: -131.5,
                         ty: 6.4,
                         tz: 25,
-                        rot2: -Math.PI/2
+                        rot2: -Math.PI/2,
                     }
                 }
             ]
@@ -300,7 +303,9 @@ export default {
                 rot: -Math.PI/2,
                 scale: 0.0014,
                 animation: true,
-                move: {forward: 1/8}
+                move: {
+                    forward: 1/100
+                }
             }
         },
         {
