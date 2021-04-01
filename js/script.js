@@ -5,9 +5,10 @@ import { ColladaLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/load
 import { GUI } from 'https://unpkg.com/three@0.126.1/examples/jsm/libs/dat.gui.module'
 import { FBXLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/FBXLoader.js'
 import { KMZLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/KMZLoader.js'
+import { GLTFLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/GLTFLoader.js'
 import models from '../data/models.js'
 
-let container, stats, controls, mixer
+let container, stats, controls, mixers = []
 let camera, scene, renderer
 let gendCar, landscape
 let movementX = 0, rotationY = 0
@@ -144,13 +145,15 @@ function loadGeneral(path,options) {
         loader = new KMZLoader()
     } else if (ext === 'fbx') {
         loader = new FBXLoader()
+    } else if (ext === 'glb') {
+        loader = new GLTFLoader()
     } else {
         console.error('Type non reconnu')
         return
     }
 
-    loader.load(path, function (collada) {
-        const model = collada.scene ? collada.scene : collada
+    loader.load(path, function (general) {
+        const model = general.scene ? general.scene : general
 
         if (options) {
             if (options.name) {
@@ -175,18 +178,25 @@ function loadGeneral(path,options) {
 
         // const gui = new GUI()
         // const landFolder = gui.addFolder('Model')
-        // landFolder.add(model.position,'x',-140,-130,0.5)
-        // landFolder.add(model.position,'y',6,7,0.1)
-        // landFolder.add(model.position,'z',20,30,0.5)
+        // landFolder.add(model.position,'x',-10,10,0.5) // -4.5
+        // landFolder.add(model.position,'y',-10,10,0.5) // 0
+        // landFolder.add(model.position,'z',-10,10,0.5) // 8
 
         if (options && options.scale) {
             model.scale.set(options.scale,options.scale,options.scale)
         }
 
         if (options && options.animation) {
-            mixer = new THREE.AnimationMixer(model)
-            const action = mixer.clipAction(model.animations[0])
+            const mixer = new THREE.AnimationMixer(model)
+            let animations
+            if (loader instanceof GLTFLoader) {
+                animations = general.animations
+            } else {
+                animations = model.animations
+            }
+            const action = mixer.clipAction(animations[options.selectedAnimation ? options.selectedAnimation : 0])
             action.play()
+            mixers.push(mixer)
         }
 
         if (options && options.name === 'gendCar') {
@@ -369,16 +379,17 @@ function render() {
         controls.update()
     }
 
-    if (mixer) {
+    mixers.forEach(mixer => {
         mixer.update(delta)
-    }
+    })
 
     renderer.render(scene, camera)
 }
 
 let factormov = 0.5
 let factorrot = 0.05
-movementX = factormov/4
+// movementX = factormov/4
+
 function handleKeyDown(e){
     // console.log(e.keyCode)
 

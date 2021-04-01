@@ -1,6 +1,14 @@
 export default {
     gendCar: [
         {
+            name: 'Expert',
+            path: './model/Expert+gendarmerie.kmz',
+            options: {
+                x: -2.5,
+                y: -1.2
+            }
+        },
+        {
             name: 'Kangoo',
             path: './model/KangooGendarmerie.kmz',
             options:{
@@ -48,7 +56,17 @@ export default {
             }
         },
         {
-            name: 'Voiture banalisée',
+            name: 'Mégane banalisée',
+            path: './model/megane-banal/model.dae',
+            options: {
+                x: -4.5,
+                y: -8,
+                z: 0,
+                rot: -Math.PI/2
+            }
+        },
+        {
+            name: 'DS banalisée',
             path: './model/ds-banal/model.dae',
             options: {
                 x: 1.5,
@@ -111,17 +129,22 @@ export default {
             },
             elements: [
                 {
-                    name: 'Girl',
+                    // name: 'Girl',
+                    name: 'Silly Dance',
                     options: {
-                        // x: -58,
                         x: -176,
                         z: -4,
-                        rot: Math.PI/2,
-                    },
-                    moveTo: {
-                        x: 0
+                        // rot: Math.PI/2,
                     }
-                }
+                },
+                // {name: '2 motards fixes'},
+                // {
+                //     name: 'Silly Mixamo',
+                //     options: {
+                //         x: -176,
+                //         z: 6,
+                //     }
+                // }
             ]
         },
         {
@@ -156,7 +179,17 @@ export default {
                         dest: 'Départementale'
                     }
                 ]
-            }
+            },
+            elements: [
+                {
+                    name: 'Kangoo',
+                    options: {
+                        // rot: Math.PI,
+                        x: -371,
+                        y: -15
+                    }
+                }
+            ]
         },
         {
             name: 'Travaux',
@@ -248,6 +281,16 @@ export default {
             options: {}
         },
         {
+            name:'Blake',
+            path: './model/blake.glb',
+            options:{
+                rot: -Math.PI/2,
+                animation: true,
+                selectedAnimation: 4
+                // moveForward: true
+            }
+        },
+        {
             name: 'Girl',
             path: './model/girl.fbx',
             options:{
@@ -256,5 +299,121 @@ export default {
                 moveForward: true
             }
         },
+        {
+            name: 'Silly Dance',
+            path: './model/Silly Dance.fbx',
+            options: {
+                scale: 0.0014,
+                animation: true,
+            }
+        },
+        {
+            name: 'Silly Mixamo',
+            path: './model/Sillydancing.fbx',
+            options: {
+                scale: 0.01,
+                animation: true
+            }
+        },
+        {
+            name: 'Peugeot 306',
+            path: './model/peugeot306.kmz',
+            options: {
+                y: -2,
+                rot: -Math.PI/2
+            }
+        },
+        {
+            name: 'Dacia Duster',
+            path: './model/dacia/model.dae',
+            options: {
+                x: -1,
+                y: -2.5,
+                rot: -Math.PI/2
+            }
+        },
+        {
+            name: 'Kangoo',
+            path: './model/kangoo/model.dae',
+            options: {
+                x: -2.5,
+                y: -1,
+            }
+        },
+        {
+            name: 'Renault Megane 2009',
+            path: './model/Renault+Megane+2009.kmz',
+            options: {
+                x: -2.5,
+                y: -1
+            }
+        },
+        {
+            name: 'LADA Piora',
+            path: './model/LADA+Piora.kmz',
+            options: {
+                x: -2.5,
+                y: -1
+            }
+        },
+        {
+            name: '4L',
+            path: './model/Renault+4+L+(m).kmz',
+            options: {
+                x: -2.5,
+                y: -1,
+                rot: Math.PI
+            }
+        },
+        {
+            name: 'Camion',
+            path: './model/Camion+P+16T.kmz',
+            options: {
+                x: -3.5,
+                y: -1.5,
+            }
+        },
+        {
+            name: 'FPTSR',
+            path: './model/FPTSR.kmz',
+            options: {
+                x: -3,
+                y: -1.5
+            }
+        },
+        {
+            name: 'VSAV',
+            path: './model/VSAV.kmz',
+            options: {
+                x: -3,
+                y: -1.2
+            }
+        },
+        {
+            name: 'Berlingo Police',
+            path: './model/Berlingo+Police.kmz',
+            options: {
+                x: -2.5,
+                y: -1
+            }
+        },
+        {
+            name: 'Kangoo Municipale',
+            path: './model/KangooMunicipale.kmz',
+            options:{
+                x:-2,
+                y:1,
+            }
+        },
+        {
+            name:'Blake',
+            path: './model/blake.glb',
+            options:{
+                // scale: ?,
+                animation: true,
+                selectedAnimation: 4
+                // moveForward: true
+            }
+        }
     ]
 }
