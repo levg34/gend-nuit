@@ -218,12 +218,31 @@ function loadGeneral(path,options) {
             landscape.isLoading = false
             // console.log(landscape)
         } else {
-            // TODO: englober dans un objet
-            if (options && options.rot) {
-                model.rotation.y += options.rot
+            const modelElement = new THREE.Object3D()
+            landscape.elements.find(element => element.name === options.name).model = modelElement
+            console.log(landscape)
+            const rotElement = new THREE.Object3D()
+            rotElement.add(model)
+            modelElement.add(rotElement)
+            if (options) {
+                if (options.rot) {
+                    rotElement.rotation.y += options.rot
+                }
+                if (options.rot2) {
+                    rotElement.rotation.y += options.rot2
+                }
+                if (options.tx) {
+                    modelElement.translateX(options.tx)
+                }
+                if (options.ty) {
+                    modelElement.translateY(options.ty)
+                }
+                if (options.tz) {
+                    modelElement.translateZ(options.tz)
+                }
             }
-            // console.log(model)
-            scene.add(model)
+            // console.log(modelElement)
+            scene.add(modelElement)
         }
     })
 }
@@ -428,8 +447,7 @@ function loadLandscape(name) {
         scene.remove(landscape.model)
         if (landscape.elements instanceof Array) {
             landscape.elements.forEach(element => {
-                const elementModel = scene.getObjectByName(element.name)
-                scene.remove(elementModel)
+                scene.remove(element.model)
             })
         }
     }

@@ -129,22 +129,14 @@ export default {
             },
             elements: [
                 {
-                    // name: 'Girl',
-                    name: 'Silly Dance',
+                    name: 'Girl',
+                    // name: 'Silly Dance',
                     options: {
-                        x: -176,
-                        z: -4,
-                        // rot: Math.PI/2,
+                        tx: -176,
+                        tz: -4,
+                        rot2: Math.PI,
                     }
-                },
-                // {name: '2 motards fixes'},
-                // {
-                //     name: 'Silly Mixamo',
-                //     options: {
-                //         x: -176,
-                //         z: 6,
-                //     }
-                // }
+                }
             ]
         },
         {
@@ -184,9 +176,9 @@ export default {
                 {
                     name: 'Kangoo',
                     options: {
-                        // rot: Math.PI,
-                        x: -371,
-                        y: -15
+                        rot2: Math.PI,
+                        tx: -371,
+                        tz: 13.5
                     }
                 }
             ]
@@ -227,17 +219,25 @@ export default {
                 {
                     name: '2 motards fixes',
                     options: {
-                        x: -162,
-                        y: 5
+                        tx: -162,
+                        tz: -5
+                    }
+                },
+                {
+                    name: 'Camion',
+                    options: {
+                        tx: -290,
+                        tz: 22.75,
+                        rot2: Math.PI
                     }
                 },
                 {
                     name: 'Girl',
                     options: {
-                        x: -131.5,
-                        y: 6.4,
-                        z: 25,
-                        rot: Math.PI
+                        tx: -131.5,
+                        ty: 6.4,
+                        tz: 25,
+                        rot2: -Math.PI/2
                     }
                 }
             ]
@@ -294,6 +294,7 @@ export default {
             name: 'Girl',
             path: './model/girl.fbx',
             options:{
+                rot: -Math.PI/2,
                 scale: 0.0014,
                 animation: true,
                 moveForward: true
@@ -337,7 +338,7 @@ export default {
             path: './model/kangoo/model.dae',
             options: {
                 x: -2.5,
-                y: -1,
+                y: -1
             }
         },
         {
@@ -403,16 +404,6 @@ export default {
             options:{
                 x:-2,
                 y:1,
-            }
-        },
-        {
-            name:'Blake',
-            path: './model/blake.glb',
-            options:{
-                // scale: ?,
-                animation: true,
-                selectedAnimation: 4
-                // moveForward: true
             }
         }
     ]
