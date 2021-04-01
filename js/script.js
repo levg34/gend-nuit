@@ -219,8 +219,9 @@ function loadGeneral(path,options) {
             // console.log(landscape)
         } else {
             const modelElement = new THREE.Object3D()
-            landscape.elements.find(element => element.name === options.name).model = modelElement
-            console.log(landscape)
+            if (landscape.elements instanceof Array) {
+                landscape.elements.find(element => element.name === options.name).model = modelElement
+            }
             const rotElement = new THREE.Object3D()
             rotElement.add(model)
             modelElement.add(rotElement)
@@ -288,11 +289,14 @@ function animate() {
 function render() {
     const delta = clock.getDelta()
     const factorfps = 60*delta
+    let factormov = 0.5
+    let factorrot = 0.05
+    // movementX = factormov/4
 
     if (gendCar.model !== undefined && landscape.model !== undefined) {
         const gendCarRotY = gendCar.options.rot ? gendCar.model.rotation.y - gendCar.options.rot : gendCar.model.rotation.y
-        const depX = movementX*Math.cos(gendCarRotY)*factorfps
-        const depZ = -movementX*Math.sin(gendCarRotY)*factorfps
+        const depX = movementX*Math.cos(gendCarRotY)*factormov*factorfps
+        const depZ = -movementX*Math.sin(gendCarRotY)*factormov*factorfps
 
         document.getElementById('debug').innerHTML = `gendCar.model.position.x : ${gendCar.model.position.x}<br>
                                                       gendCar.model.position.y : ${gendCar.model.position.y}<br>
@@ -316,9 +320,9 @@ function render() {
         gendCar.model.position.z-=depZ
 
         if (movementX > 0) {
-            gendCar.model.rotation.y -= rotationY
+            gendCar.model.rotation.y -= rotationY*factorrot
         } else if (movementX < 0) {
-            gendCar.model.rotation.y -= -rotationY
+            gendCar.model.rotation.y -= -rotationY*factorrot
         }
 
         if (landscape.values && landscape.values.bounds) {
@@ -389,6 +393,16 @@ function render() {
             camera.position.z-=depZ
             controls.target.z-=depZ
         }
+
+        if (landscape.elements instanceof Array) {
+            landscape.elements.forEach(element => {
+                if (element.move) {
+                    if (element.move.forward) {
+                        // faire avancer de element.move.forward
+                    }
+                }
+            })
+        }
         
         controls.update()
     }
@@ -400,25 +414,21 @@ function render() {
     renderer.render(scene, camera)
 }
 
-let factormov = 0.5
-let factorrot = 0.05
-// movementX = factormov/4
-
 function handleKeyDown(e){
     // console.log(e.keyCode)
 
     if (e.keyCode == 40) {
-        movementX = -factormov
+        movementX = -1
     }
     if (e.keyCode == 38) {
-        movementX = factormov
+        movementX = 1
     }
 
     if (e.keyCode == 39) {
-        rotationY = factorrot
+        rotationY = 1
     }
     if (e.keyCode == 37) {
-        rotationY = -factorrot
+        rotationY = -1
     }
 
     if (e.keyCode == 32) {

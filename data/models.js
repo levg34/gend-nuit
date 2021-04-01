@@ -228,7 +228,10 @@ export default {
                     options: {
                         tx: -290,
                         tz: 22.75,
-                        rot2: Math.PI
+                        rot2: Math.PI,
+                        move: {
+                            forward: 1/4
+                        }
                     }
                 },
                 {
@@ -287,7 +290,7 @@ export default {
                 rot: -Math.PI/2,
                 animation: true,
                 selectedAnimation: 4
-                // moveForward: true
+                // move: {forward: ?}
             }
         },
         {
@@ -297,7 +300,7 @@ export default {
                 rot: -Math.PI/2,
                 scale: 0.0014,
                 animation: true,
-                moveForward: true
+                move: {forward: 1/8}
             }
         },
         {
