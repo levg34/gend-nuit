@@ -36,18 +36,12 @@ function init() {
 
     scene = new THREE.Scene()
 
-    // collada
+    // Modèles de départ
 
     loadLandscape()
-    // loadLandscape('Autoroute sortie')
-    // loadLandscape('Autoroute A9 - Le Boulou')
-    // loadLandscape('Travaux')
-    // loadLandscape('Autoroute')
-    // loadLandscape('Autoroute avec pont')
-    // loadModel('elements','2 motards fixes')
     loadSelectedGendCar()
 
-    //
+    // Lumières
 
     const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4)
     scene.add(ambientLight)
@@ -57,7 +51,7 @@ function init() {
     // directionalLight.castShadow = true
     scene.add(directionalLight)
 
-    //
+    // Renderer
 
     renderer = new THREE.WebGLRenderer()
     renderer.setPixelRatio(window.devicePixelRatio)
@@ -66,7 +60,7 @@ function init() {
     // renderer.antialias = true
     container.appendChild(renderer.domElement)
 
-    //
+    // Composants
 
     stats = new Stats()
     container.appendChild(stats.dom)
@@ -79,7 +73,8 @@ function init() {
     controls.target.set(0,1,0)
     controls.update()
 
-    // helpers
+    // Helpers
+
     // const gridHelper = new THREE.GridHelper(28, 28, 0x303030, 0x303030)
     // scene.add(gridHelper)
 
@@ -93,7 +88,7 @@ function init() {
     // orbitFolder.add(controls,'minDistance',0,100,5)
     // orbitFolder.add(controls,'maxDistance',0,100,10)
 
-    //
+    // Ajouter à la fenêtre
 
     window.addEventListener('resize', onWindowResize)
 }
@@ -223,6 +218,7 @@ function loadGeneral(path,options) {
             landscape.isLoading = false
             // console.log(landscape)
         } else {
+            // TODO: englober dans un objet
             if (options && options.rot) {
                 model.rotation.y += options.rot
             }
@@ -332,7 +328,6 @@ function render() {
                 let ignoreZmin = false
 
                 if (hasChange) {
-                    // const change = landscape.values.change[0]
                     landscape.values.change.forEach(change => {
                         const changeX = change.x
                         const changeZ = change.z
