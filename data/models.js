@@ -136,6 +136,25 @@ export default {
                         tz: -4,
                         rot2: Math.PI
                     }
+                },
+                {
+                    name: 'Peugeot 306',
+                    options: {
+                        tx: -325,
+                        tz: 3.5,
+                        rot2: Math.PI,
+                        move: {
+                            forward: 1/8
+                        }
+                    }
+                },
+                {
+                    name: '4L',
+                    options: {
+                        tx: -196,
+                        tz: -8,
+                        rot2: 1.05
+                    }
                 }
             ]
         },

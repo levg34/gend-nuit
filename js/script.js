@@ -8,6 +8,8 @@ import { KMZLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/
 import { GLTFLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/GLTFLoader.js'
 import models from '../data/models.js'
 
+const cars = models.elements.slice(5)
+
 let container, stats, controls, mixers = []
 let camera, scene, renderer
 let gendCar, landscape
