@@ -173,12 +173,6 @@ function loadGeneral(path,options) {
         }
         makeShadow(model)
 
-        // const gui = new GUI()
-        // const landFolder = gui.addFolder('Model')
-        // landFolder.add(model.position,'x',-10,10,0.5) // -4.5
-        // landFolder.add(model.position,'y',-10,10,0.5) // 0
-        // landFolder.add(model.position,'z',-10,10,0.5) // 8
-
         if (options && options.scale) {
             model.scale.set(options.scale,options.scale,options.scale)
         }
@@ -248,6 +242,20 @@ function loadGeneral(path,options) {
             scene.add(modelElement)
         }
     })
+}
+
+function createGUI(model,options) {
+    const min = options && options.min ? options.min : -10
+    const max = options && options.max ? options.max : 10
+    const step = options && options.step ? options.step : 0.5
+
+    const gui = new GUI()
+    const landFolder = gui.addFolder('Model')
+    landFolder.add(model.position,'x',model.position.x+min,model.position.x+max,step)
+    landFolder.add(model.position,'y',model.position.y+min,model.position.y+max,step)
+    landFolder.add(model.position,'z',model.position.z+min,model.position.z+max,step)
+
+    landFolder.add(model.rotation,'y',-Math.PI,Math.PI,Math.PI/6)
 }
 
 function makeShadow(object) {

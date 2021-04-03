@@ -264,6 +264,33 @@ export default {
                         tz: 25,
                         rot2: -Math.PI/2,
                     }
+                },
+                {
+                    name: 'FPTSR',
+                    options: {
+                        tx: -148,
+                        ty: 6.4,
+                        tz: 5,
+                        rot2: Math.PI/6
+                    }
+                },
+                {
+                    name: 'Kangoo Municipale',
+                    options: {
+                        tx: -146,
+                        ty: 6.4,
+                        tz: -8,
+                        rot2: 0.1
+                    }
+                },
+                {
+                    name: 'VSAV',
+                    options: {
+                        tx: -40,
+                        move: {
+                            forward: 1/4
+                        }
+                    }
                 }
             ]
         },
