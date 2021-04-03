@@ -125,6 +125,18 @@ const models = {
                         },
                         dest: 'Autoroute avec pont'
                     }
+                ],
+                lanes: [
+                    {
+                        rot: 0,
+                        z: 0,
+                        x:0
+                    },
+                    {
+                        rot: Math.PI,
+                        z: 3.5,
+                        x: -325
+                    }
                 ]
             },
             elements: [
@@ -137,17 +149,17 @@ const models = {
                         rot2: Math.PI
                     }
                 },
-                {
-                    name: 'Peugeot 306',
-                    options: {
-                        tx: -325,
-                        tz: 3.5,
-                        rot2: Math.PI,
-                        move: {
-                            forward: 1/8
-                        }
-                    }
-                },
+                // {
+                //     name: 'Peugeot 306',
+                //     options: {
+                //         tx: -325,
+                //         tz: 3.5,
+                //         rot2: Math.PI,
+                //         move: {
+                //             forward: 1/8
+                //         }
+                //     }
+                // },
                 {
                     name: '4L',
                     options: {
@@ -188,6 +200,12 @@ const models = {
                             max: -16
                         },
                         dest: 'Départementale'
+                    }
+                ],
+                lanes: [
+                    {
+                        rot: 0,
+                        z: 0
                     }
                 ]
             },
@@ -243,7 +261,13 @@ const models = {
                         maxS1: 9,
                         max: 26
                     }
-                }
+                },
+                lanes: [
+                    {
+                        rot: 0,
+                        z: 0
+                    }
+                ]
             },
             elements: [
                 {
@@ -475,6 +499,34 @@ models.gendCar.forEach(gc => {
     const gcElement = {...gc}
     gcElement.name += '-gendCar'
     models.elements.push(gcElement)
+})
+
+// const EPSILON = 0.0001
+const cars = models.elements.slice(5)
+
+let index = 0
+models.landscape.forEach(l => {
+    if (l.values && l.values.bounds && l.values.lanes instanceof Array) {
+        l.values.lanes.forEach(lane => {
+            const car =  {
+                name: cars[index++%cars.length].name,
+                options: {
+                    tx: lane.x,
+                    tz: lane.z,
+                    rot2: lane.rot,
+                    move: {
+                        forward: 1/8
+                    }
+                }
+            }
+
+            if (!l.elements instanceof Array) {
+                l.elements = []
+            }
+
+            l.elements.push(car)
+        })
+    }
 })
 
 export default models
