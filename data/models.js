@@ -1,4 +1,4 @@
-export default {
+const models = {
     gendCar: [
         {
             name: 'Expert',
@@ -201,6 +201,14 @@ export default {
                         move: {
                             forward: 1/4
                         }
+                    }
+                },
+                {
+                    name: 'Expert-gendCar',
+                    options: {
+                        tx: -349,
+                        tz: -4.35,
+                        rot2: 0.00001
                     }
                 }
             ]
@@ -462,3 +470,11 @@ export default {
         }
     ]
 }
+
+models.gendCar.forEach(gc => {
+    const gcElement = {...gc}
+    gcElement.name += '-gendCar'
+    models.elements.push(gcElement)
+})
+
+export default models
