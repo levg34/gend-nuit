@@ -358,7 +358,7 @@ const models = {
             options: {}
         }
     ],
-    elements: [   
+    elements: [
         {
             name: '2 motards fixes',
             path: './model/motards-gend-fixes/model.dae',
