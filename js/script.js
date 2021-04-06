@@ -15,6 +15,8 @@ let camera, scene, renderer
 let gendCar, landscape
 let movementX = 0, rotationY = 0
 
+const cameras = []
+
 const clock = new THREE.Clock()
 
 const gendCarSelect = document.getElementById('gendCarSelect')
@@ -35,6 +37,14 @@ function init() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000)
     camera.position.set(9, 5, 4.5)
     camera.lookAt(0, 1, 0)
+
+    cameras.push(camera)
+
+    const camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000)
+    camera2.position.set(9, 3, 0)
+    camera2.lookAt(0, 1, 0)
+
+    cameras.push(camera2)
 
     scene = new THREE.Scene()
 
@@ -67,13 +77,13 @@ function init() {
     stats = new Stats()
     container.appendChild(stats.dom)
 
-    controls = new OrbitControls(camera, renderer.domElement)
-    controls.maxPolarAngle = Math.PI/2-0.02
-    controls.minDistance = 5
-    controls.maxDistance = 50
-    controls.enablePan = false
-    controls.target.set(0,1,0)
-    controls.update()
+    // controls = new OrbitControls(camera, renderer.domElement)
+    // controls.maxPolarAngle = Math.PI/2-0.02
+    // controls.minDistance = 5
+    // controls.maxDistance = 50
+    // controls.enablePan = false
+    // controls.target.set(0,1,0)
+    // controls.update()
 
     // Helpers
 
@@ -123,11 +133,6 @@ function removeGendCar() {
 
 function loadGendCar(name) {
     removeGendCar()
-    if (controls !== undefined && camera !== undefined) {
-        camera.position.set(9, 5, 4.5)
-        camera.lookAt(0, 1, 0)
-        controls.target.set(0,1,0)
-    }
     gendCar = loadModel('gendCar',name)
     gendCar.isLoading = true
 }
@@ -196,6 +201,8 @@ function loadGeneral(path,options) {
             if (options.rot) {
                 gendCar.model.rotation.y += options.rot
             }
+            gendCar.model.add(cameras[0])
+            gendCar.model.add(cameras[1])
             scene.add(gendCar.model)
             gendCar.isLoading = false
             // console.log(gendCar)
@@ -311,16 +318,7 @@ function render() {
         document.getElementById('debug').innerHTML = `gendCar.model.position.x : ${gendCar.model.position.x}<br>
                                                       gendCar.model.position.y : ${gendCar.model.position.y}<br>
                                                       gendCar.model.position.z : ${gendCar.model.position.z}<br>
-                                                      gendCar.model.rotation.y : ${gendCarRotY}<br>
-                                                      camera.position.x : ${camera.position.x}<br>
-                                                      camera.position.y : ${camera.position.y}<br>
-                                                      camera.position.z : ${camera.position.z}<br>`
-
-        let updateCamera = {
-            x: true,
-            y: true,
-            z: true
-        }
+                                                      gendCar.model.rotation.y : ${gendCarRotY}<br>`
 
         if (gendCar.isLoading) {
             return
@@ -339,16 +337,10 @@ function render() {
             if (landscape.values.bounds.x.max !== undefined) {
                 if (gendCar.model.position.x < landscape.values.bounds.x.max) {
                     gendCar.model.position.x = 0
-                    camera.position.x -= landscape.values.bounds.x.max 
-                    controls.target.x = 0
-                    updateCamera.x = false
                 }
         
                 if (gendCar.model.position.x > 0) {
                     gendCar.model.position.x = landscape.values.bounds.x.max
-                    camera.position.x -= -landscape.values.bounds.x.max
-                    controls.target.x = landscape.values.bounds.x.max
-                    updateCamera.x = false
                 }
             }
             if (landscape.values.bounds.z) {
@@ -386,22 +378,11 @@ function render() {
 
                 if (zIsOverMax && !ignoreZmax) {
                     gendCar.model.position.z = boundsZ.max
-                    updateCamera.z = false
                 }
                 if (zIsUnderMin && !ignoreZmin) {
                     gendCar.model.position.z = boundsZ.min
-                    updateCamera.z = false
                 }
             }
-        }
-
-        if (updateCamera.x) {
-            camera.position.x-=depX
-            controls.target.x-=depX
-        }
-        if (updateCamera.z) {
-            camera.position.z-=depZ
-            controls.target.z-=depZ
         }
 
         if (landscape.elements instanceof Array) {
@@ -426,7 +407,7 @@ function render() {
             })
         }
         
-        controls.update()
+        // controls.update()
     }
 
     mixers.forEach(mixer => {
@@ -436,8 +417,9 @@ function render() {
     renderer.render(scene, camera)
 }
 
+let iCamera = 0
 function handleKeyDown(e){
-    // console.log(e.keyCode)
+    console.log(e.keyCode)
 
     if (e.keyCode == 40) {
         movementX = -1
@@ -455,6 +437,11 @@ function handleKeyDown(e){
 
     if (e.keyCode == 32) {
         // espace
+    }
+    
+    if (e.keyCode == 67) {
+        // C
+        camera = cameras[++iCamera%cameras.length]
     }
 }
 
